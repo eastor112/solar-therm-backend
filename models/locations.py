@@ -1,6 +1,7 @@
-from sqlalchemy import TIMESTAMP, Column, String, Boolean, Integer, text
+from sqlalchemy import DateTime, Column, String, Boolean, Integer, Float, text
 from models.base import SQLModel
 from sqlalchemy.orm import relationship
+from sqlalchemy.sql import func
 
 
 class Location(SQLModel):
@@ -8,11 +9,10 @@ class Location(SQLModel):
   id = Column(Integer, primary_key=True)
   place = Column(String, nullable=False)
   country = Column(String, nullable=False, server_default='Peru')
-  lat = Column(String, nullable=False)
-  lng = Column(String, nullable=False)
-  primary = Column(Boolean, nullable=False)
-  created_at = Column(TIMESTAMP(timezone=True),
-                      nullable=False, server_default=text("now()"))
-  updated_at = Column(TIMESTAMP(timezone=True),
-                      nullable=False, server_default=text("now()"))
+  lat = Column(Float, nullable=False)
+  lng = Column(Float, nullable=False)
+  is_calculated = Column(Boolean, nullable=False)
+  created_at = Column(DateTime, server_default=func.now())
+  updated_at = Column(DateTime, server_default=func.now(), onupdate=func.now())
+  #
   weathers = relationship("Weather", back_populates="location")

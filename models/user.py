@@ -11,4 +11,5 @@ class User(SQLModel):
   first_name = Column(String(50), nullable=False)
   last_name = Column(String(50), nullable=False)
   is_admin = Column(Boolean, default=False)
+  #
   projects = relationship("Project", back_populates="user")
