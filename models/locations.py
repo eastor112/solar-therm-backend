@@ -1,7 +1,6 @@
-from sqlalchemy import DateTime, Column, String, Boolean, Integer, Float, text
+from sqlalchemy import DateTime, Column, String, Boolean, Integer, Float, func
 from models.base import SQLModel
 from sqlalchemy.orm import relationship
-from sqlalchemy.sql import func
 
 
 class Location(SQLModel):
