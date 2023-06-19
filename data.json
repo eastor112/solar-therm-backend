@@ -1,0 +1,22 @@
+[{
+    "id": 1,
+    "place": "Trujillo",
+    "country": "Peru",
+    "lat": 51.5,
+    "lng": -0.1,
+    "primary": true
+}, {
+    "id": 2,
+    "place": "Lima",
+    "country": "Peru",
+    "lat": -12.05,
+    "lng": -77.05,
+    "primary": true
+}, {
+    "id": 3,
+    "place": "Piura",
+    "country": "Peru",
+    "lat": -12.05,
+    "lng": -77.05,
+    "primary": true
+}]

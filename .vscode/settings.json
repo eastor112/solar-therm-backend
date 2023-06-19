@@ -1,0 +1,21 @@
+{
+  "[python]": {
+    "editor.defaultFormatter": "ms-python.autopep8",
+    "editor.formatOnSave": true
+  },
+  "python.formatting.provider": "none",
+  "autopep8.args": [
+    "--indent-size=2"
+  ],
+  "sqltools.connections": [
+    {
+      "previewLimit": 50,
+      "server": "localhost",
+      "port": 5432,
+      "driver": "PostgreSQL",
+      "name": "test",
+      "database": "solarTherm",
+      "username": "postgres"
+    }
+  ]
+}
