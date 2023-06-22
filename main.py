@@ -4,12 +4,11 @@ from const import (
     OPEN_API_DESCRIPTION,
     OPEN_API_TITLE,
 )
-from routers import locations, weather
+from routers import locations, weather, projects
 from backend.database import engine
 import models
 
 models.SQLModel.metadata.create_all(bind=engine)
-
 
 app = FastAPI(
     title=OPEN_API_TITLE,
@@ -18,6 +17,6 @@ app = FastAPI(
     swagger_ui_parameters={"defaultModelsExpandDepth": -1},
 )
 
-
 app.include_router(locations.router)
 app.include_router(weather.router)
+app.include_router(projects.router)
