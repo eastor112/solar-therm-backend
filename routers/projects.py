@@ -29,3 +29,8 @@ async def create_project(payload: ProjectInitializeSchema, session: Session = De
 @router.patch("/{id}")
 async def update_project(id: int, payload: ProjectUpdateSchema, session: Session = Depends(get_session)):
   return ProjectService(session).update_project(id, payload)
+
+
+@router.delete("/{id}")
+async def delete_project(id: int, session: Session = Depends(get_session)):
+  return ProjectService(session).delete_project(id)

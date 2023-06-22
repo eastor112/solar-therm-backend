@@ -41,3 +41,15 @@ class ProjectService(BaseService):
       return ProjectRetrieveSchema.from_orm(project_to_update)
 
     return None
+
+  def delete_project(self, id: int) -> bool:
+    """Delete project."""
+
+    project_to_delete = self.session.query(Project).get(id)
+
+    if project_to_delete:
+      self.session.delete(project_to_delete)
+      self.session.commit()
+      return True
+
+    return False
