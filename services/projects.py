@@ -1,6 +1,6 @@
 from typing import List
 from models.projects import Project
-from schemas.projects import ProjectInitializeSchema, ProjectRetrieveSchema, ProjectSchema
+from schemas.projects import ProjectInitializeSchema, ProjectRetrieveSchema, ProjectSchema, ProjectUpdateSchema
 from services.base import BaseService
 
 
@@ -20,11 +20,24 @@ class ProjectService(BaseService):
       return ProjectRetrieveSchema(**location.to_dict())
     return None
 
-  def create_project(self, project: ProjectInitializeSchema) -> ProjectSchema:
+  def create_project(self, project: ProjectInitializeSchema) -> ProjectRetrieveSchema:
     """Create project."""
 
     new_project = Project(**project.dict())
     self.session.add(new_project)
     self.session.commit()
 
-    return ProjectSchema(**new_project.to_dict())
+    return ProjectRetrieveSchema(**new_project.to_dict())
+
+  def update_project(self, id: int, project: ProjectUpdateSchema) -> ProjectRetrieveSchema:
+    """Update project."""
+    project_to_update = self.session.query(Project).get(id)
+
+    if project_to_update:
+      for attr, value in project.dict(exclude_unset=True, exclude_defaults=True).items():
+        setattr(project_to_update, attr, value)
+      self.session.commit()
+
+      return ProjectRetrieveSchema.from_orm(project_to_update)
+
+    return None

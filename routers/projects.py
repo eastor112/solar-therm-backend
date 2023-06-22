@@ -1,6 +1,6 @@
 from sqlalchemy.orm import Session
 from backend.database import get_session
-from schemas.projects import ProjectInitializeSchema
+from schemas.projects import ProjectInitializeSchema, ProjectUpdateSchema
 from services.projects import ProjectService
 from fastapi import (
     APIRouter,
@@ -24,3 +24,8 @@ async def get_project(id: int, session: Session = Depends(get_session)):
 @router.post("/")
 async def create_project(payload: ProjectInitializeSchema, session: Session = Depends(get_session)):
   return ProjectService(session).create_project(payload)
+
+
+@router.patch("/{id}")
+async def update_project(id: int, payload: ProjectUpdateSchema, session: Session = Depends(get_session)):
+  return ProjectService(session).update_project(id, payload)
