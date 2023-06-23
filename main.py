@@ -4,7 +4,7 @@ from const import (
     OPEN_API_DESCRIPTION,
     OPEN_API_TITLE,
 )
-from routers import locations, weather, projects
+from routers import locations, weather, projects, users
 from backend.database import engine
 import models
 
@@ -20,3 +20,4 @@ app = FastAPI(
 app.include_router(locations.router)
 app.include_router(weather.router)
 app.include_router(projects.router)
+app.include_router(users.router)
