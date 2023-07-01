@@ -20,3 +20,4 @@ class Project(SQLModel):
   user_id = Column(Integer, ForeignKey("users.id"))
   #
   user = relationship("User", back_populates="projects")
+  location = relationship("Location", back_populates="projects")

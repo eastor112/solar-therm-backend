@@ -1,6 +1,6 @@
 from typing import List
 from models.projects import Project
-from schemas.projects import ProjectInitializeSchema, ProjectRetrieveSchema, ProjectSchema, ProjectUpdateSchema
+from schemas.projects import ProjectInitializeSchema, ProjectRetrieveSchema, ProjectUpdateSchema
 from services.base import BaseService
 
 
@@ -8,16 +8,16 @@ class ProjectService(BaseService):
   def get_projects(self) -> List[ProjectRetrieveSchema]:
     """Get all projects."""
 
-    locations = self.session.query(Project).all()
-    return [ProjectRetrieveSchema(**location.to_dict()) for location in locations]
+    projects = self.session.query(Project).all()
+    return [ProjectRetrieveSchema.from_orm(project) for project in projects]
 
-  def get_project(self, location_id: int) -> ProjectRetrieveSchema:
+  def get_project(self, project_id: int) -> ProjectRetrieveSchema:
     """Get project by ID."""
 
-    location = self.session.query(Project).get(location_id)
+    project = self.session.query(Project).get(project_id)
 
-    if location:
-      return ProjectRetrieveSchema(**location.to_dict())
+    if project:
+      return ProjectRetrieveSchema.from_orm(project)
     return None
 
   def create_project(self, project: ProjectInitializeSchema) -> ProjectRetrieveSchema:

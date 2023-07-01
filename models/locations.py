@@ -15,3 +15,4 @@ class Location(SQLModel):
   updated_at = Column(DateTime, server_default=func.now(), onupdate=func.now())
   #
   weathers = relationship("Weather", back_populates="location")
+  projects = relationship("Project", back_populates="location")

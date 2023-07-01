@@ -1,5 +1,6 @@
+from dataclasses import Field
 from pydantic import BaseModel
-from typing import Optional
+from typing import List, Optional
 from datetime import date, datetime
 
 
@@ -29,6 +30,18 @@ class ProjectUpdateSchema(BaseModel):
   location_id: Optional[int]
 
 
+class LocationSchema(BaseModel):
+  id: int
+  place: str
+  country: str
+  lat: float
+  lng: float
+  is_calculated: bool
+
+  class Config:
+    orm_mode = True
+
+
 class ProjectRetrieveSchema(BaseModel):
   id: int
   name: str
@@ -39,7 +52,7 @@ class ProjectRetrieveSchema(BaseModel):
   manifold: float | None
   date: date | None
   deleted: bool | None
-  location_id: int | None
+  location: LocationSchema | None
 
   class Config:
     orm_mode = True
