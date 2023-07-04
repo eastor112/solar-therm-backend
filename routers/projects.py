@@ -5,6 +5,7 @@ from services.projects import ProjectService
 from fastapi import (
     APIRouter,
     Depends,
+    Query,
 )
 
 
@@ -12,8 +13,8 @@ router = APIRouter(prefix='/projects', tags=['projects'])
 
 
 @router.get("/")
-async def get_projects(session: Session = Depends(get_session)):
-  return ProjectService(session).get_projects()
+async def get_projects(page: int = Query(default=1, ge=1), size: int = Query(default=10, ge=1), session: Session = Depends(get_session)):
+  return ProjectService(session).get_projects(page=page, size=size)
 
 
 @router.get("/{id}")

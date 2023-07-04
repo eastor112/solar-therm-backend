@@ -22,8 +22,8 @@ class ProjectUpdateSchema(BaseModel):
   name: Optional[str]
   user_id: Optional[int]
   pipeline_number: Optional[int]
-  pipeline_type: Optional[str]
-  volumen: Optional[int]
+  pipeline_type: Optional[int]
+  volumen: Optional[float]
   manifold: Optional[float]
   date: Optional[date]
   deleted: Optional[bool] = False
@@ -47,11 +47,10 @@ class ProjectRetrieveSchema(BaseModel):
   name: str
   user_id: int
   pipeline_number: int | None
-  pipeline_type: str | None
-  volumen: int | None
+  pipeline_type: int | None
+  volumen: float | None
   manifold: float | None
   date: date | None
-  deleted: bool | None
   location: LocationSchema | None
 
   class Config:

@@ -11,8 +11,9 @@ from services.base import (
 class WeatherService(BaseService):
   def get_day_weather(self, location_id: int, since: str, to: str) -> WeatherSchema:
     """Get day weather."""
-    since_datetime = datetime.strptime(since, "%Y-%m-%dT%H:%M:%S.%fZ")
-    to_datetime = datetime.strptime(to, "%Y-%m-%dT%H:%M:%S.%fZ")
+
+    since_datetime = datetime.strptime(since, '%Y-%m-%dT%H:%M:%S.%f%z')
+    to_datetime = datetime.strptime(to, '%Y-%m-%dT%H:%M:%S.%f%z')
 
     weather_records = (
         self.session.query(Weather)

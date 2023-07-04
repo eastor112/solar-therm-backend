@@ -5,11 +5,13 @@ from services.base import BaseService
 
 
 class ProjectService(BaseService):
-  def get_projects(self) -> List[ProjectRetrieveSchema]:
-    """Get all projects."""
 
-    projects = self.session.query(Project).all()
-    return [ProjectRetrieveSchema.from_orm(project) for project in projects]
+  def get_projects(self, page: int, size: int) -> List[ProjectRetrieveSchema]:
+    """Get paginated projects."""
+
+    offset = (page - 1) * size
+    projects = self.session.query(Project).offset(offset).limit(size).all()
+    return list(map(ProjectRetrieveSchema.from_orm, projects))
 
   def get_project(self, project_id: int) -> ProjectRetrieveSchema:
     """Get project by ID."""
