@@ -1,17 +1,24 @@
+from math import ceil
 from typing import List
 from models.projects import Project
-from schemas.projects import ProjectInitializeSchema, ProjectRetrieveSchema, ProjectUpdateSchema
+from schemas.projects import ProjectInitializeSchema, ProjectListResponseSchema, ProjectRetrieveSchema, ProjectUpdateSchema
 from services.base import BaseService
+from sqlalchemy import func
 
 
 class ProjectService(BaseService):
 
-  def get_projects(self, page: int, size: int) -> List[ProjectRetrieveSchema]:
-    """Get paginated projects."""
+  def get_projects(self, page: int, size: int) -> ProjectListResponseSchema:
+    """Get paginated projects with total pages."""
 
     offset = (page - 1) * size
     projects = self.session.query(Project).offset(offset).limit(size).all()
-    return list(map(ProjectRetrieveSchema.from_orm, projects))
+
+    # Calculate total projects count for pagination
+    total_projects = self.session.query(func.count(Project.id)).scalar()
+    total_pages = ceil(total_projects / size)
+
+    return ProjectListResponseSchema(page=page, total=total_pages, projects=projects, page_size=size)
 
   def get_project(self, project_id: int) -> ProjectRetrieveSchema:
     """Get project by ID."""

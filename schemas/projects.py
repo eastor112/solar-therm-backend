@@ -55,3 +55,10 @@ class ProjectRetrieveSchema(BaseModel):
 
   class Config:
     orm_mode = True
+
+
+class ProjectListResponseSchema(BaseModel):
+  page: int
+  total: int
+  projects: List[ProjectRetrieveSchema]
+  page_size: int

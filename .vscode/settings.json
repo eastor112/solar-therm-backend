@@ -16,6 +16,15 @@
       "name": "test",
       "database": "solarTherm",
       "username": "postgres"
+    },
+    {
+      "previewLimit": 50,
+      "server": "localhost",
+      "port": 5432,
+      "driver": "PostgreSQL",
+      "name": "windows-test",
+      "database": "solarTherm",
+      "username": "postgres"
     }
   ]
 }
