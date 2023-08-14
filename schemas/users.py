@@ -17,6 +17,17 @@ class UserCreateSchema(BaseModel):
   last_name: str | None
 
 
+class UserRetrieveSchema(BaseModel):
+  id: int
+  email: str
+  first_name: str | None
+  last_name: str | None
+  is_admin: bool
+
+  class Config:
+    orm_mode = True
+
+
 class UserSchema(UserLoginSchema):
   id: int
   email: str

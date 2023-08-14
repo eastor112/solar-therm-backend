@@ -36,7 +36,7 @@ class ProjectService(BaseService):
     self.session.add(new_project)
     self.session.commit()
 
-    return ProjectRetrieveSchema(**new_project.to_dict())
+    return ProjectRetrieveSchema.from_orm(new_project)
 
   def update_project(self, id: int, project: ProjectUpdateSchema) -> ProjectRetrieveSchema:
     """Update project."""

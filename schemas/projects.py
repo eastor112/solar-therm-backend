@@ -1,7 +1,7 @@
-from dataclasses import Field
 from pydantic import BaseModel
 from typing import List, Optional
 from datetime import date, datetime
+from schemas.users import UserRetrieveSchema
 
 
 class ProjectInitializeSchema(BaseModel):
@@ -52,6 +52,7 @@ class ProjectRetrieveSchema(BaseModel):
   manifold: float | None
   date: date | None
   location: LocationSchema | None
+  user: UserRetrieveSchema
 
   class Config:
     orm_mode = True
