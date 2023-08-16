@@ -13,8 +13,10 @@ class ProjectService(BaseService):
     """Get paginated projects with total pages and combined filter."""
 
     offset = (page - 1) * size
-    query = self.session.query(Project).join(
-        Project.user).join(Project.location).order_by(desc(Project.updated_at))
+    query = self.session.query(Project).\
+        outerjoin(Project.user).\
+        outerjoin(Project.location).\
+        order_by(desc(Project.updated_at))
 
     if filter_param:
       search_term = filter_param.lower()  # Convert the filter to lowercase
