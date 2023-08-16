@@ -1,18 +1,33 @@
 from math import ceil
 from typing import List
+from models import Location, User
 from models.projects import Project
 from schemas.projects import ProjectInitializeSchema, ProjectListResponseSchema, ProjectRetrieveSchema, ProjectUpdateSchema
 from services.base import BaseService
-from sqlalchemy import func
+from sqlalchemy import func, desc, or_
 
 
 class ProjectService(BaseService):
 
-  def get_projects(self, page: int, size: int) -> ProjectListResponseSchema:
-    """Get paginated projects with total pages."""
+  def get_projects(self, page: int, size: int, filter_param: str = None) -> ProjectListResponseSchema:
+    """Get paginated projects with total pages and combined filter."""
 
     offset = (page - 1) * size
-    projects = self.session.query(Project).offset(offset).limit(size).all()
+    query = self.session.query(Project).join(
+        Project.user).join(Project.location).order_by(desc(Project.updated_at))
+
+    if filter_param:
+      search_term = filter_param.lower()  # Convert the filter to lowercase
+      query = query.filter(
+          or_(
+              func.lower(Project.name).like(f"%{search_term}%"),
+              func.lower(Location.place).like(f"%{search_term}%"),
+              func.lower(User.first_name).like(f"%{search_term}%"),
+              func.lower(User.last_name).like(f"%{search_term}%"),
+          )
+      )
+
+    projects = query.offset(offset).limit(size).all()
 
     # Calculate total projects count for pagination
     total_projects = self.session.query(func.count(Project.id)).scalar()

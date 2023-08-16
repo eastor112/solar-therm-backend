@@ -42,10 +42,8 @@ class LocationSchema(BaseModel):
     orm_mode = True
 
 
-class ProjectRetrieveSchema(BaseModel):
-  id: int
-  name: str
-  user_id: int
+class ProjectRetrieveSchema(ProjectSchema):
+
   pipeline_number: int | None
   pipeline_type: int | None
   volumen: float | None

@@ -13,8 +13,13 @@ router = APIRouter(prefix='/projects', tags=['projects'])
 
 
 @router.get("/")
-async def get_projects(page: int = Query(default=1, ge=1), size: int = Query(default=10, ge=1), session: Session = Depends(get_session)):
-  return ProjectService(session).get_projects(page=page, size=size)
+async def get_projects(
+    page: int = Query(default=1, ge=1),
+    size: int = Query(default=10, ge=1),
+    filter: str = Query(default=None),
+    session: Session = Depends(get_session)
+):
+  return ProjectService(session).get_projects(page=page, size=size, filter_param=filter)
 
 
 @router.get("/{id}")
