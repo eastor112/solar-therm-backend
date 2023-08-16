@@ -27,11 +27,9 @@ class ProjectService(BaseService):
           )
       )
 
+    count = query.count()
     projects = query.offset(offset).limit(size).all()
-
-    # Calculate total projects count for pagination
-    total_projects = self.session.query(func.count(Project.id)).scalar()
-    total_pages = ceil(total_projects / size)
+    total_pages = ceil(count / size)
 
     return ProjectListResponseSchema(page=page, total=total_pages, projects=projects, page_size=size)
 
