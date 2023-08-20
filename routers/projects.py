@@ -12,7 +12,7 @@ from fastapi import (
 router = APIRouter(prefix='/projects', tags=['projects'])
 
 
-@router.get("/")
+@router.get("")
 async def get_projects(
     page: int = Query(default=1, ge=1),
     size: int = Query(default=10, ge=1),
@@ -27,7 +27,7 @@ async def get_project(id: int, session: Session = Depends(get_session)):
   return ProjectService(session).get_project(id)
 
 
-@router.post("/")
+@router.post("")
 async def create_project(payload: ProjectInitializeSchema, session: Session = Depends(get_session)):
   return ProjectService(session).create_project(payload)
 

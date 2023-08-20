@@ -21,6 +21,6 @@ async def get_user_by_token(payload: UserTokenValidationSchema, session: Session
   return UserService(session).get_user_by_token(payload)
 
 
-@router.post("/")
+@router.post("")
 async def create_user(payload: UserCreateSchema, session: Session = Depends(get_session)):
   return UserService(session).create_user(payload)

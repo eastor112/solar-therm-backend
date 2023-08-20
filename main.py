@@ -1,4 +1,5 @@
 from fastapi import FastAPI
+from backend.config import settings
 from version import __version__
 from const import (
     OPEN_API_DESCRIPTION,
@@ -19,9 +20,7 @@ app = FastAPI(
 )
 
 origins = [
-    "http://localhost",
-    "http://localhost:3000",
-    "https://solar-therm-designer.vercel.app"
+    settings.CLIENT_ORIGIN,
 ]
 
 app.add_middleware(
