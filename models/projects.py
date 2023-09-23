@@ -25,3 +25,4 @@ class Project(SQLModel):
   #
   user = relationship("User", back_populates="projects")
   location = relationship("Location", back_populates="projects")
+  pipeline = relationship("Pipeline", back_populates="projects")

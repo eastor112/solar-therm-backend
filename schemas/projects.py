@@ -22,7 +22,10 @@ class ProjectUpdateSchema(BaseModel):
   name: Optional[str]
   user_id: Optional[int]
   pipeline_number: Optional[int]
-  pipeline_type: Optional[int]
+  pipeline_separation: Optional[float]
+  inclination_deg: Optional[float]
+  azimuth_deg: Optional[float]
+  granularity: Optional[int]
   volumen: Optional[float]
   manifold: Optional[float]
   date: Optional[date]
@@ -36,6 +39,7 @@ class LocationSchema(BaseModel):
   country: str
   lat: float
   lng: float
+  altitude: float
   is_calculated: bool
 
   class Config:
@@ -45,7 +49,10 @@ class LocationSchema(BaseModel):
 class ProjectRetrieveSchema(ProjectSchema):
 
   pipeline_number: int | None
-  pipeline_type: int | None
+  pipeline_separation: float | None
+  inclination_deg: float | None
+  azimuth_deg: float | None
+  granularity: int | None
   volumen: float | None
   manifold: float | None
   date: date | None

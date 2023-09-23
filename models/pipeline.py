@@ -1,4 +1,5 @@
 from sqlalchemy import Column, String, Integer, Float
+from sqlalchemy.orm import relationship
 from models.base import SQLModel
 
 
@@ -9,3 +10,5 @@ class Pipeline(SQLModel):
   external_diameter = Column(Float(), nullable=True, default=0.0)
   internal_diameter = Column(Float(), nullable=True, default=0.0)
   long = Column(Float(), nullable=True, default=0.0)
+  #
+  projects = relationship("Project", back_populates="pipeline")
