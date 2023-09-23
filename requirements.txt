@@ -4,3 +4,4 @@ uvicorn>=0.22.0
 psycopg2>=2.9.6
 SQLAlchemy>=2.0.16
 tzdata>=2023.3
+alembic==1.11.1

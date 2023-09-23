@@ -10,6 +10,7 @@ class Location(SQLModel):
   country = Column(String, nullable=False, server_default='Peru')
   lat = Column(Float, nullable=False)
   lng = Column(Float, nullable=False)
+  altitude = Column(Float, nullable=False)
   is_calculated = Column(Boolean, nullable=False)
   created_at = Column(DateTime, server_default=func.now())
   updated_at = Column(DateTime, server_default=func.now(), onupdate=func.now())
