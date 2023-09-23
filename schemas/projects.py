@@ -1,6 +1,7 @@
 from pydantic import BaseModel
 from typing import List, Optional
 from datetime import date, datetime
+from schemas.pipelines import PipelineRetrieveSchema
 from schemas.users import UserRetrieveSchema
 
 
@@ -58,6 +59,7 @@ class ProjectRetrieveSchema(ProjectSchema):
   date: date | None
   location: LocationSchema | None
   user: UserRetrieveSchema
+  pipeline: PipelineRetrieveSchema | None
 
   class Config:
     orm_mode = True

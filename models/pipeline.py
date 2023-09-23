@@ -9,6 +9,6 @@ class Pipeline(SQLModel):
   name = Column(String(50), nullable=False)
   external_diameter = Column(Float(), nullable=True, default=0.0)
   internal_diameter = Column(Float(), nullable=True, default=0.0)
-  long = Column(Float(), nullable=True, default=0.0)
+  length = Column(Float(), nullable=True, default=0.0)
   #
   projects = relationship("Project", back_populates="pipeline")
