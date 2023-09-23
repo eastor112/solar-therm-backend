@@ -13,5 +13,7 @@ class TheoricParams(SQLModel):
   location_id = Column(Integer, ForeignKey("locations.id"))
   pipeline_id = Column(Integer, ForeignKey("pipelines.id"))
   #
-  location = relationship("Location", back_populates="theoric_params")
   pipeline = relationship("Pipeline", back_populates="theoric_params")
+  location = relationship("Location", back_populates="theoric_params")
+  theoric_register = relationship(
+      "TheoricRegister", back_populates="theoric_params")

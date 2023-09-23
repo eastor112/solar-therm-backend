@@ -10,5 +10,5 @@ class TheoricRegister(SQLModel):
   energy = Column(Float(), default=0.0)
   params_id = Column(Integer, ForeignKey("theoric_params.id"))
   #
-  theoretic_params = relationship(
+  theoric_params = relationship(
       "TheoricParams", back_populates="theoric_register")
