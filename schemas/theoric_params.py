@@ -28,6 +28,9 @@ class PipelineRetrieveSchema(BaseModel):
   internal_diameter: float
   length: float
 
+  class Config:
+    orm_mode = True
+
 
 class TheoricParamsRetriveSchema(BaseModel):
   id: int

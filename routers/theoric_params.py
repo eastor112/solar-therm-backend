@@ -8,7 +8,7 @@ from backend.database import get_session
 from schemas.theoric_params import TheoricParamsCreateSchema, TheoricParamsUpdateSchema
 from services.theoric_params import TheoricParamsService
 
-router = APIRouter(prefix='/tparams', tags=['theoric_params'])
+router = APIRouter(prefix='/theoretical', tags=['theoric_params'])
 
 
 @router.get("")

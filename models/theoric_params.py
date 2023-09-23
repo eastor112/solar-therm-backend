@@ -5,7 +5,7 @@ from sqlalchemy.orm import relationship
 
 class TheoricParams(SQLModel):
   __tablename__ = 'theoric_params'
-  id = Column(Integer, primary_key=True, autoincrement=True)
+  id = Column(Integer, primary_key=True)
   inclination_deg = Column(Float(), default=0.0)
   azimuth_deg = Column(Float(), default=0.0)
   granularity = Column(Integer, default=24)

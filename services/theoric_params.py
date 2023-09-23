@@ -12,7 +12,6 @@ class TheoricParamsService(BaseService):
   def get_all_theoric_params(self) -> List[TheoricParamsRetriveSchema]:
     """Get all theoric_params."""
     theoric_params = self.session.query(TheoricParams).all()
-
     return [TheoricParamsRetriveSchema.from_orm(theoric_param) for theoric_param in theoric_params]
 
   def get_theoric_param(self, theoric_param_id: int) -> TheoricParamsRetriveSchema:
