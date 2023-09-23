@@ -17,3 +17,4 @@ class Location(SQLModel):
   #
   weathers = relationship("Weather", back_populates="location")
   projects = relationship("Project", back_populates="location")
+  theoric_params = relationship("TheoricParams", back_populates="location")

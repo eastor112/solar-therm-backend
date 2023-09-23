@@ -12,3 +12,4 @@ class Pipeline(SQLModel):
   length = Column(Float(), nullable=True, default=0.0)
   #
   projects = relationship("Project", back_populates="pipeline")
+  theoric_params = relationship("TheoricParams", back_populates="pipeline")
