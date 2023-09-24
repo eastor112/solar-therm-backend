@@ -1,5 +1,5 @@
 from pydantic import BaseModel
-from typing import Optional
+from typing import Optional, List
 from schemas.projects import LocationSchema
 
 
@@ -43,3 +43,16 @@ class TheoricParamsRetriveSchema(BaseModel):
 
   class Config:
     orm_mode = True
+
+
+class EnergyCalculatorRequestSchema(BaseModel):
+  local_longitude: float
+  local_latitude: float
+  local_height: float
+  inclination: float
+  azimuth: float
+  inner_diameter: float
+  outer_diameter: float
+  pipeline_length: float
+  pipeline_separation: float
+  granularity: int

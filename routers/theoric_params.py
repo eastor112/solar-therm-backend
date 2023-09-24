@@ -5,7 +5,7 @@ from fastapi import (
     HTTPException,
 )
 from backend.database import get_session
-from schemas.theoric_params import TheoricParamsCreateSchema, TheoricParamsUpdateSchema
+from schemas.theoric_params import EnergyCalculatorRequestSchema, TheoricParamsCreateSchema, TheoricParamsUpdateSchema
 from services.theoric_params import TheoricParamsService
 
 router = APIRouter(prefix='/theoretical', tags=['theoric_params'])
@@ -44,3 +44,11 @@ async def delete_theoric_param(theoric_param_id: int, session: Session = Depends
   if not TheoricParamsService(session).delete_theoric_param(theoric_param_id):
     raise HTTPException(status_code=404, detail="TheoricParam not found")
   return {"message": "TheoricParam deleted successfully"}
+
+
+@router.post("/calculate")
+async def calculate_energy(
+    request_data: EnergyCalculatorRequestSchema,
+    session: Session = Depends(get_session)
+):
+  return TheoricParamsService(session).calculate_annual_energy(request_data)

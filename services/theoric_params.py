@@ -1,11 +1,13 @@
 from typing import List
 from schemas.theoric_params import (
+    EnergyCalculatorRequestSchema,
     TheoricParamsCreateSchema,
     TheoricParamsUpdateSchema,
     TheoricParamsRetriveSchema,
 )
 from models.theoric_params import TheoricParams
 from services.base import BaseService
+from thermal_model.pipeline_energy_anual import calculate_annual_energy
 
 
 class TheoricParamsService(BaseService):
@@ -51,3 +53,11 @@ class TheoricParamsService(BaseService):
       self.session.commit()
       return True
     return False
+
+  def calculate_annual_energy(self, request_data: EnergyCalculatorRequestSchema) -> dict:
+    """Calculate the annual energy captured by a solar collector."""
+    calculation_data = request_data.dict()
+
+    annual_energy, daily_energy = calculate_annual_energy(**calculation_data)
+
+    return {"message": "Calculation successful", "total": annual_energy}
