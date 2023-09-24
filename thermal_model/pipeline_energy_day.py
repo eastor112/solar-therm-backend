@@ -11,8 +11,8 @@ def get_pipe_energy(
     longitud_local,
     granularity,
     local_height,
-    inner_diameter,
-    outer_diameter,
+    internal_diameter,
+    external_diameter,
     pipeline_separation,
     pipeline_length
 ):
@@ -66,7 +66,7 @@ def get_pipe_energy(
     g_difus[i] = m.diffuse_radiation_horizontal(g_oo[i], tau_dif[i])
 
   f_forma = m.diffuse_radiation_shape_function(
-      inner_diameter, outer_diameter, pipeline_separation)
+      internal_diameter, external_diameter, pipeline_separation)
 
   # CALCULO DE LAS POTENCIAS HORARIAS QUE INCIDEN SOBRE UN TUBO AL VACIO [W] (Tang, 2009)
   # =========================================================================
@@ -91,13 +91,13 @@ def get_pipe_energy(
     angulo_omega[i] = m.omega_angle(nnx[i], nny[i])
     ang_theta_t[i] = np.degrees(math.acos(math.sqrt(nnx[i]**2 + nny[i]**2)))
     func_accep[i] = m.acceptance_function(
-        inner_diameter, outer_diameter, pipeline_separation, angulo_omega[i])
+        internal_diameter, external_diameter, pipeline_separation, angulo_omega[i])
     potencia_haz_1t[i] = m.direct_radiant_power(
-        g_beam_n[i], inner_diameter, pipeline_length, ang_theta_t[i], func_accep[i])
+        g_beam_n[i], internal_diameter, pipeline_length, ang_theta_t[i], func_accep[i])
     g_difus_beta[i] = m.diffuse_radiation_inclined_surface(
         g_difus[i], inclination)
     potencia_difus_1t[i] = m.diffuse_radiant_power(
-        g_difus_beta[i], inner_diameter, pipeline_length, f_forma)
+        g_difus_beta[i], internal_diameter, pipeline_length, f_forma)
 
   potencia_total_1t = potencia_haz_1t + potencia_difus_1t
 

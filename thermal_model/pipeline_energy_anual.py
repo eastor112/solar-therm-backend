@@ -8,8 +8,8 @@ def calculate_annual_energy(
     local_height,
     inclination,
     azimuth,
-    inner_diameter,
-    outer_diameter,
+    internal_diameter,
+    external_diameter,
     pipeline_length,
     pipeline_separation,
     granularity
@@ -44,8 +44,8 @@ def calculate_annual_energy(
         local_longitude,
         granularity,
         local_height,
-        inner_diameter,
-        outer_diameter,
+        internal_diameter,
+        external_diameter,
         pipeline_separation,
         pipeline_length
     )

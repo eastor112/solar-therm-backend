@@ -6,7 +6,7 @@ from services.theoric_register import TheoricRegisterService
 from typing import List
 
 
-router = APIRouter(prefix='/theoric-registers', tags=['theoric-registers'])
+router = APIRouter(prefix='/register', tags=['theoric-registers'])
 
 
 @router.post("/create-multiple")

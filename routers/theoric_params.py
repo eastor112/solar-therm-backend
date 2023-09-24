@@ -3,10 +3,13 @@ from fastapi import (
     APIRouter,
     Depends,
     HTTPException,
+    Path,
 )
 from backend.database import get_session
+from models.theoric_params import TheoricParams
 from schemas.theoric_params import EnergyCalculatorRequestSchema, TheoricParamsCreateSchema, TheoricParamsUpdateSchema
 from services.theoric_params import TheoricParamsService
+from thermal_model.pipeline_energy_anual import calculate_annual_energy
 
 router = APIRouter(prefix='/theoretical', tags=['theoric_params'])
 
@@ -52,3 +55,13 @@ async def calculate_energy(
     session: Session = Depends(get_session)
 ):
   return TheoricParamsService(session).calculate_annual_energy(request_data)
+
+
+@router.get("/calculate/params/{theoric_param_id}")
+async def calculate_energy_for_location_pipeline(
+    theoric_param_id: int = Path(..., title="Theoric Param ID"),
+    session: Session = Depends(get_session)
+):
+
+  return TheoricParamsService(
+      session).calculate_annual_energy_from_params(theoric_param_id)

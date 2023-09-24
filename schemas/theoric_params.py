@@ -51,8 +51,8 @@ class EnergyCalculatorRequestSchema(BaseModel):
   local_height: float
   inclination: float
   azimuth: float
-  inner_diameter: float
-  outer_diameter: float
+  internal_diameter: float
+  external_diameter: float
   pipeline_length: float
   pipeline_separation: float
   granularity: int

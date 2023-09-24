@@ -16,7 +16,7 @@ class TheoricRegisterService:
   def get_registers_by_params_id(self, session: Session, params_id: int) -> List[TheoricRegisterRetrieveSchema]:
     registers = session.query(TheoricRegister).filter(
         TheoricRegister.params_id == params_id).all()
-    return [TheoricRegisterRetrieveSchema(**register.dict()) for register in registers]
+    return [TheoricRegisterRetrieveSchema(**register.to_dict()) for register in registers]
 
   def delete_registers_by_params_id(self, session: Session, params_id: int):
     deleted_count = session.query(TheoricRegister).filter(
