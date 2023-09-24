@@ -5,7 +5,16 @@ from const import (
     OPEN_API_DESCRIPTION,
     OPEN_API_TITLE,
 )
-from routers import locations, weather, projects, users, pipelines, theoric_params
+from routers import (
+    locations,
+    weather,
+    projects,
+    users,
+    pipelines,
+    theoric_params,
+    theoric_register
+)
+
 from backend.database import engine
 import models
 from fastapi.middleware.cors import CORSMiddleware
@@ -37,3 +46,4 @@ app.include_router(projects.router)
 app.include_router(users.router)
 app.include_router(pipelines.router)
 app.include_router(theoric_params.router)
+app.include_router(theoric_register.router)
