@@ -29,10 +29,31 @@ class TheoricParamsService(BaseService):
 
   def create_theoric_param(self, theoric_param: TheoricParamsCreateSchema) -> TheoricParamsRetriveSchema:
     """Create theoric_param."""
-    new_theoric_param = TheoricParams(**theoric_param.dict())
-    self.session.add(new_theoric_param)
-    self.session.commit()
-    return TheoricParamsRetriveSchema.from_orm(new_theoric_param)
+
+    params = theoric_param.dict()
+    location = self.session.query(Location).get(params['location_id'])
+    pipeline = self.session.query(Pipeline).get(params['pipeline_id'])
+
+    duplicate_params = self.session.query(TheoricParams).filter(
+        TheoricParams.azimuth_deg == params['azimuth_deg'],
+        TheoricParams.inclination_deg == params['inclination_deg'],
+        TheoricParams.granularity == params['granularity'],
+        TheoricParams.pipeline_separation == params['pipeline_separation'],
+    ).join(TheoricParams.location).join(TheoricParams.pipeline).filter(
+        Location.lng == location.lng,
+        Location.lat == location.lat,
+        Location.altitude == location.altitude,
+        Pipeline.internal_diameter == pipeline.internal_diameter,
+        Pipeline.external_diameter == pipeline.external_diameter,
+        Pipeline.length == pipeline.length,
+    ).first()
+    if not duplicate_params:
+      new_theoric_param = TheoricParams(**theoric_param.dict())
+      self.session.add(new_theoric_param)
+      self.session.commit()
+      return TheoricParamsRetriveSchema.from_orm(new_theoric_param)
+    else:
+      return TheoricParamsRetriveSchema.from_orm(duplicate_params)
 
   def update_theoric_param(
       self, theoric_param_id: int, theoric_param: TheoricParamsUpdateSchema
@@ -60,9 +81,7 @@ class TheoricParamsService(BaseService):
   def calculate_annual_energy(self, request_data: EnergyCalculatorRequestSchema) -> dict:
     """Calculate the annual energy captured by a solar collector."""
     calculation_data = request_data.dict()
-
     annual_energy, daily_energy = calculate_annual_energy(**calculation_data)
-
     return {"message": "Calculation successful", "total": annual_energy}
 
   def calculate_annual_energy_from_params(self, theoric_param_id: int) -> bool:
@@ -114,5 +133,4 @@ class TheoricParamsService(BaseService):
       current_theoric_params.isCalculated = True
       self.session.commit()
       return {"message": "Calculation successful"}
-
     return {"message": "Calculation successful (duplicated)"}
