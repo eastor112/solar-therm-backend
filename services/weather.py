@@ -19,6 +19,7 @@ class WeatherService(BaseService):
         self.session.query(Weather)
         .filter(Weather.location_id == location_id)
         .filter(and_(Weather.date >= since_datetime, Weather.date <= to_datetime))
+        .order_by(Weather.date)
         .all()
     )
 

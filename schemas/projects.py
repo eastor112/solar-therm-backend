@@ -61,6 +61,16 @@ class ProjectRetrieveSchema(ProjectSchema):
   user: UserRetrieveSchema
   pipeline: PipelineRetrieveSchema | None
 
+  @classmethod
+  def from_orm(cls, project):
+    model = super().from_orm(project)
+
+    # Formatear la fecha de YYYY-MM-DD a DD-MM-YYYY
+    if model.date:
+      model.date = datetime.strftime(model.date, "%d-%m-%Y")
+
+    return model
+
   class Config:
     orm_mode = True
 
