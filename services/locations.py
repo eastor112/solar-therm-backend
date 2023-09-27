@@ -8,7 +8,7 @@ from services.base import BaseService
 class LocationsService(BaseService):
   def get_locations(self) -> List[LocationResponseSchema]:
     """Get all locations."""
-    locations = self.session.query(Location).all()
+    locations = self.session.query(Location).order_by(Location.id).all()
     return [LocationResponseSchema(**location.to_dict()) for location in locations]
 
   def get_location(self, location_id: int) -> LocationResponseSchema:
