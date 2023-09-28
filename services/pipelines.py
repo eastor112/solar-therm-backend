@@ -16,7 +16,7 @@ class PipelineService(BaseService):
   def get_pipelines(self) -> List[PipelineRetrieveSchema]:
     """Get all pipelines."""
 
-    pipelines = self.session.query(Pipeline).all()
+    pipelines = self.session.query(Pipeline).order_by(Pipeline.id).all()
     return [PipelineRetrieveSchema(**pipeline.to_dict()) for pipeline in pipelines]
 
   def get_pipeline(self, pipeline_id: int) -> Optional[PipelineRetrieveSchema]:
