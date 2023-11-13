@@ -22,6 +22,10 @@ class TheoricParamsUpdateSchema(BaseModel):
   pipeline_id: Optional[int]
 
 
+class TheoricParamsDeleteSchema(BaseModel):
+  params_ids: List[int]
+
+
 class PipelineRetrieveSchema(BaseModel):
   id: int
   name: str

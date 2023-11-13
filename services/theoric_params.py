@@ -5,6 +5,7 @@ from models.theoric_register import TheoricRegister
 from schemas.theoric_params import (
     EnergyCalculatorRequestSchema,
     TheoricParamsCreateSchema,
+    TheoricParamsDeleteSchema,
     TheoricParamsUpdateSchema,
     TheoricParamsRetriveSchema,
 )
@@ -83,6 +84,25 @@ class TheoricParamsService(BaseService):
       self.session.commit()
       return True
     return False
+
+  def delete_multiple_theoric_params(self, payload: TheoricParamsDeleteSchema):
+    body = payload.dict()
+
+    theoric_params_ids = self.session.query(TheoricParams.id).filter(
+        TheoricParams.id.in_(body["params_ids"])
+    ).all()
+
+    self.session.query(TheoricRegister).filter(
+        TheoricRegister.params_id.in_([id_[0] for id_ in theoric_params_ids])
+    ).delete(synchronize_session=False)
+
+    self.session.query(TheoricParams).filter(
+        TheoricParams.id.in_([id_[0] for id_ in theoric_params_ids])
+    ).delete(synchronize_session=False)
+
+    self.session.commit()
+
+    return True
 
   def calculate_annual_energy(self, request_data: EnergyCalculatorRequestSchema) -> dict:
     """Calculate the annual energy captured by a solar collector."""
