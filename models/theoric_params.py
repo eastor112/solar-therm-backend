@@ -13,8 +13,10 @@ class TheoricParams(SQLModel):
   isCalculated = Column(Boolean, nullable=False)
   location_id = Column(Integer, ForeignKey("locations.id"))
   pipeline_id = Column(Integer, ForeignKey("pipelines.id"))
+  project_id = Column(Integer, ForeignKey("projects.id"))
   #
   pipeline = relationship("Pipeline", back_populates="theoric_params")
   location = relationship("Location", back_populates="theoric_params")
   theoric_register = relationship(
       "TheoricRegister", back_populates="theoric_params")
+  project = relationship("Project", back_populates="theoric_params")

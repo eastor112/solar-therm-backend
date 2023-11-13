@@ -47,6 +47,7 @@ class TheoricParamsService(BaseService):
         Pipeline.external_diameter == pipeline.external_diameter,
         Pipeline.length == pipeline.length,
     ).first()
+
     if not duplicate_params:
       new_theoric_param = TheoricParams(**theoric_param.dict())
       self.session.add(new_theoric_param)
@@ -70,10 +71,15 @@ class TheoricParamsService(BaseService):
 
   def delete_theoric_param(self, theoric_param_id: int) -> bool:
     """Delete theoric_param by ID."""
-    theoric_param_to_delete = self.session.query(
+    theoric_param = self.session.query(
         TheoricParams).get(theoric_param_id)
-    if theoric_param_to_delete:
-      self.session.delete(theoric_param_to_delete)
+
+    if theoric_param:
+      self.session.query(TheoricRegister).filter(
+          TheoricRegister.params_id == theoric_param_id
+      ).delete()
+
+      self.session.delete(theoric_param)
       self.session.commit()
       return True
     return False
@@ -134,3 +140,9 @@ class TheoricParamsService(BaseService):
       self.session.commit()
       return {"message": "Calculation successful"}
     return {"message": "Calculation successful (duplicated)"}
+
+  def get_theoric_params_by_project(self, project_id: int) -> List[TheoricParamsRetriveSchema]:
+    """Get all theoric_params for a specific project."""
+    theoric_params = self.session.query(
+        TheoricParams).filter_by(project_id=project_id).all()
+    return [TheoricParamsRetriveSchema.from_orm(theoric_param) for theoric_param in theoric_params]

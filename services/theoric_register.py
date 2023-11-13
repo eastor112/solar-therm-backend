@@ -2,6 +2,7 @@ from typing import List
 from sqlalchemy.orm import Session
 from schemas.theoric_register import TheoricRegisterCreateSchema, TheoricRegisterRetrieveSchema
 from models.theoric_register import TheoricRegister
+from models.theoric_params import TheoricParams
 
 
 class TheoricRegisterService:
@@ -23,3 +24,24 @@ class TheoricRegisterService:
         TheoricRegister.params_id == params_id).delete()
     session.commit()
     return deleted_count
+
+  def get_registers_grouped_by_project(self, session, project_id: int) -> List[List[TheoricRegisterRetrieveSchema]]:
+    params = session.query(TheoricParams.id.label('param_id')).filter(
+        TheoricParams.project_id == project_id
+    ).all()
+
+    result = []
+
+    for param in params:
+      param_id = param.param_id
+
+      registers = session.query(TheoricRegister).filter(
+          TheoricRegister.params_id == param_id).all()
+
+      register_list = [TheoricRegisterRetrieveSchema(
+          **register.to_dict()) for register in registers]
+
+      if (len(register_list) > 0):
+        result.append(register_list)
+
+    return result

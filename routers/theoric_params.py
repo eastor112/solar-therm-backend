@@ -65,3 +65,13 @@ async def calculate_energy_for_location_pipeline(
 
   return TheoricParamsService(
       session).calculate_annual_energy_from_params(theoric_param_id)
+
+
+@router.get("/project/{project_id}")
+async def get_theoric_params_by_project(
+    project_id: int,
+    session: Session = Depends(get_session)
+):
+  theoric_params = TheoricParamsService(
+      session).get_theoric_params_by_project(project_id)
+  return theoric_params

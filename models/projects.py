@@ -1,4 +1,5 @@
-from sqlalchemy import DateTime, Column, String, Boolean, Integer, Float, Date, ForeignKey
+from sqlalchemy import (DateTime, Column, String, Boolean,
+                        Integer, Float, Date, ForeignKey)
 from sqlalchemy.orm import relationship
 from models.base import SQLModel
 from sqlalchemy.sql import func
@@ -26,3 +27,4 @@ class Project(SQLModel):
   user = relationship("User", back_populates="projects")
   location = relationship("Location", back_populates="projects")
   pipeline = relationship("Pipeline", back_populates="projects")
+  theoric_params = relationship("TheoricParams", back_populates="project")

@@ -10,6 +10,7 @@ class TheoricParamsCreateSchema(BaseModel):
   pipeline_separation: Optional[float] = 0.0
   location_id: int
   pipeline_id: int
+  project_id: int
 
 
 class TheoricParamsUpdateSchema(BaseModel):
@@ -40,6 +41,7 @@ class TheoricParamsRetriveSchema(BaseModel):
   pipeline_separation: float
   location: LocationSchema
   pipeline: PipelineRetrieveSchema
+  project_id: int
 
   class Config:
     orm_mode = True

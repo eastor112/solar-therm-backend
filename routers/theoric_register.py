@@ -33,3 +33,13 @@ async def delete_registers_by_params_id(
   deleted_count = TheoricRegisterService(
   ).delete_registers_by_params_id(session, params_id)
   return {"message": f"Successfully deleted {deleted_count} theoric registers."}
+
+
+@router.get("/project/{project_id}", response_model=List[List[TheoricRegisterRetrieveSchema]])
+async def get_registers_grouped_by_project(
+    project_id: int,
+    session: Session = Depends(get_session)
+):
+  grouped_registers = TheoricRegisterService(
+  ).get_registers_grouped_by_project(session, project_id)
+  return grouped_registers
