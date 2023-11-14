@@ -36,6 +36,7 @@ class TheoricParamsService(BaseService):
     pipeline = self.session.query(Pipeline).get(params['pipeline_id'])
 
     duplicate_params = self.session.query(TheoricParams).filter(
+        TheoricParams.project_id == params['project_id'],
         TheoricParams.azimuth_deg == params['azimuth_deg'],
         TheoricParams.inclination_deg == params['inclination_deg'],
         TheoricParams.granularity == params['granularity'],
@@ -131,6 +132,7 @@ class TheoricParamsService(BaseService):
     }
 
     duplicate_params = self.session.query(TheoricParams).filter(
+        TheoricParams.project_id == current_theoric_params.project_id,
         TheoricParams.isCalculated == True,
         TheoricParams.azimuth_deg == params['azimuth'],
         TheoricParams.inclination_deg == params['inclination'],
