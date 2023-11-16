@@ -12,3 +12,4 @@ COPY . /code
 CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "80"]
 
 # docker buildx build --platform linux/amd64,linux/arm64,linux/arm/v7 -t eastor112/solartherm-backend:mises --push .
+# docker build -t eastor112/solartherm-backend:mises --push .
