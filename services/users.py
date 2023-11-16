@@ -3,7 +3,7 @@ from schemas.users import UserCreateSchema, UserLoginSchema, UserSchema, UserTok
 from services.base import BaseService
 import secrets
 import string
-from fastapi import HTTPException
+from fastapi import HTTPException, status
 
 
 class UserService(BaseService):
@@ -14,7 +14,8 @@ class UserService(BaseService):
 
     if user and user.password == (payload.password):
       return UserSchema(**user.to_dict())
-    return HTTPException(status_code=404, detail="User not found")
+    raise HTTPException(
+        status_code=status.HTTP_404_NOT_FOUND, detail="User not found")
 
   def get_user_by_token(self, payload: UserTokenValidationSchema) -> UserSchema:
     """Get user by token."""
@@ -22,7 +23,7 @@ class UserService(BaseService):
 
     if user:
       return UserSchema(**user.to_dict())
-    return HTTPException(status_code=404, detail="User not found")
+    raise HTTPException(status_code=404, detail="User not found")
 
   def create_user(self, payload: UserCreateSchema) -> UserSchema:
     """Create user."""

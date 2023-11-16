@@ -28,10 +28,9 @@ class UserRetrieveSchema(BaseModel):
     orm_mode = True
 
 
-class UserSchema(UserLoginSchema):
+class UserSchema(BaseModel):
   id: int
   email: str
-  password: str
   first_name: str | None
   last_name: str | None
   token: str
