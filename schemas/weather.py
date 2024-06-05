@@ -24,3 +24,14 @@ class WeatherSchema(BaseModel):
 
   class Config:
     orm_mode = True
+
+
+class PVGISParams(BaseModel):
+  latitude: float
+  longitude: float
+  raddatabase: str = "PVGIS-ERA5"
+  startyear: int = 2020
+  endyear: int = 2020
+  angle: int = 15
+  azimuth: int = 0
+  outputformat: str = 'json'

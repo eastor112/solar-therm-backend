@@ -2,10 +2,50 @@ from datetime import datetime
 from sqlalchemy import and_
 from models.weather import Weather
 from schemas.weather import WeatherSchema
+import requests
+from fastapi import HTTPException
+from functools import lru_cache
 
 from services.base import (
     BaseService,
 )
+
+
+@lru_cache(maxsize=32)
+def fetch_pvgis_data(
+    lat: float,
+    lon: float,
+    raddatabase: str,
+    startyear: int,
+    endyear: int,
+    angle: int,
+    azimuth: int,
+    outputformat: str
+):
+  params = {
+      "lat": lat,
+      "lon": lon,
+      "raddatabase": raddatabase,
+      "endyear": endyear,
+      "startyear": startyear,
+      "angle": angle,
+      "azimuth": azimuth,
+      "outputformat": outputformat
+  }
+
+  url_base = f"https://re.jrc.ec.europa.eu/api/v5_2/seriescalc?"
+
+  url_params = "&".join(
+      [f'{key}={value}' for key, value in params.items()])
+  final_url = f'{url_base}&{url_params}'
+
+  response = requests.get(final_url)
+
+  if response.status_code == 200:
+    return response.json()
+  else:
+    raise HTTPException(status_code=response.status_code,
+                        detail=response.reason)
 
 
 class WeatherService(BaseService):
@@ -27,3 +67,6 @@ class WeatherService(BaseService):
         weather) for weather in weather_records]
 
     return weather_schema_list
+
+  def get_pvgis_data(self, params):
+    return fetch_pvgis_data(**params)
