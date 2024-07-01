@@ -5,6 +5,9 @@ from schemas.weather import WeatherSchema
 import requests
 from fastapi import HTTPException
 from functools import lru_cache
+from thermal_model.results import calcular_parametros_solares
+import json
+import numpy as np
 
 from services.base import (
     BaseService,
@@ -29,7 +32,7 @@ def fetch_pvgis_data(
       "endyear": endyear,
       "startyear": startyear,
       "angle": angle,
-      "azimuth": azimuth,
+      "aspect": azimuth,
       "outputformat": outputformat
   }
 
@@ -70,3 +73,13 @@ class WeatherService(BaseService):
 
   def get_pvgis_data(self, params):
     return fetch_pvgis_data(**params)
+
+  def test(self):
+    data = calcular_parametros_solares(
+        2022, 1, 1, 12, 0, -79.0286, -8.11167, 33, 15, 180)
+    data_converted = {key: value.tolist() if isinstance(
+        value, np.ndarray) else value for key, value in data.items()}
+
+    data = json.dumps(data_converted, indent=2)
+
+    return data_converted

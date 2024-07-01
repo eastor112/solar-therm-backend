@@ -38,3 +38,8 @@ async def getDayWeather(
       "outputformat": outputformat
   }
   return WeatherService(session).get_pvgis_data(params)
+
+
+@router.get("/test")
+async def test(session: Session = Depends(get_session)):
+  return WeatherService(session).test()
