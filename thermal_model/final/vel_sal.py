@@ -1,7 +1,7 @@
 from math import sqrt
 
 
-def VelSal(Re, Mu_T, Rho_T, D_int, F_flujo):
+def vel_sal(Re, Mu_T, Rho_T, D_int, F_flujo):
   """
   Función que entrega la velocidad media de agua caliente que sale del tubo al vacío [m/s]
 

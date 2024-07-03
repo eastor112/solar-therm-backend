@@ -1,7 +1,7 @@
 import numpy as np
 
 
-def Diam_Int_Tanque(Vol_TK, L_int_TK):
+def diam_int_tanque(Vol_TK, L_int_TK):
   """
   Función que calcula el diámetro interno del tanque [m]
 

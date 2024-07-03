@@ -2,7 +2,7 @@ import csv
 import numpy as np
 
 
-def datoclimadiario(data, anho, mes, dia):
+def dato_clima_diario(anho, mes, dia, data=[]):
   # file_path = 'TRUJILLO_2022.csv'
   # data = []
 

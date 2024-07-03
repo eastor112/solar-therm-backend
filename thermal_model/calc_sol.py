@@ -318,7 +318,7 @@ v_viento = 3
 # Datos ambientales - DATOS CLIMATICOS
 # ------------------------------------
 # Carga los vectores de datos climaticos segun el dia, mes y año escogido
-datohora, datoradiacion, datotamb, datovviento = m.datoclimadiario(
+datohora, datoradiacion, datotamb, datovviento = n.datoclimadiario(
     anho, mes, dia)
 # NOTA
 # ----
