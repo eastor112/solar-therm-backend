@@ -2,19 +2,22 @@ from datetime import datetime
 from sqlalchemy import and_
 from models.weather import Weather
 from schemas.weather import WeatherSchema
-import requests
-from fastapi import HTTPException
-from functools import lru_cache
-from thermal_model.results import calcular_parametros_solares
+from thermal_model.results import get_therma_results
 import json
 import numpy as np
+import pytz
+import requests
+from functools import lru_cache
+from fastapi import HTTPException
+from datetime import datetime
+
 
 from services.base import (
     BaseService,
 )
 
 
-@lru_cache(maxsize=32)
+@lru_cache(maxsize=128)
 def fetch_pvgis_data(
     lat: float,
     lon: float,
@@ -45,6 +48,14 @@ def fetch_pvgis_data(
   response = requests.get(final_url)
 
   if response.status_code == 200:
+    data = response.json()
+    lima_tz = pytz.timezone('America/Lima')
+
+    for entry in data['outputs']['hourly']:
+      dt_naive = datetime.strptime(entry['time'], '%Y%m%d:%H%M')
+      dt_utc = pytz.utc.localize(dt_naive)
+      dt_lima = dt_utc.astimezone(lima_tz)
+      entry['time'] = dt_lima.strftime('%Y-%m-%dT%H:%M:%S%z')
     return response.json()
   else:
     raise HTTPException(status_code=response.status_code,
@@ -75,11 +86,23 @@ class WeatherService(BaseService):
     return fetch_pvgis_data(**params)
 
   def test(self):
-    data = calcular_parametros_solares(
-        2022, 1, 1, 12, 0, -79.0286, -8.11167, 33, 15, 180)
-    data_converted = {key: value.tolist() if isinstance(
-        value, np.ndarray) else value for key, value in data.items()}
+    date_time = "2020-01-01 12:00"
 
-    data = json.dumps(data_converted, indent=2)
+    thermal_data = fetch_pvgis_data(
+        -8.031,
+        -78.908,
+        "PVGIS-ERA5",
+        2020,
+        2020,
+        15,
+        120,
+        "json"
+    )
+    results = get_therma_results(
+        thermal_data, date_time, -79.0286, -8.11167, 33, 15, 180)
+    data_converted = {key: value.tolist() if isinstance(
+        value, np.ndarray) else value for key, value in results.items()}
+
+    results = json.dumps(data_converted, indent=2)
 
     return data_converted

@@ -1,4 +1,4 @@
-import thermal_model.theoretical as m
+import thermal_model.theoretical as tm
 import thermal_model.final as n
 import numpy as np
 
@@ -16,19 +16,19 @@ azimuth = 180
 
 
 # Calculos
-n = m.n_dia(dia, mes)
-gon = m.g_on(n)
-hora_solar = m.solar_time(n, hora, minuto, longitud_local)
-ang_delta = m.delta(n)
-ang_omega = m.omega(hora_solar)
-ang_omega_s = m.omega_s(latitud_local, ang_delta)
-hora_aparec_sol = m.sunrise(ang_omega_s)
-hora_puesta_sol = m.sunset(ang_omega_s)
-ang_theta = m.theta(ang_delta, latitud_local, inclinacion, azimuth, ang_omega)
-ang_theta_z = m.theta_z(ang_delta, latitud_local, azimuth, ang_omega)
-ang_alpha_s = m.alpha_s(ang_theta_z)
-ang_gamma_s = m.gamma_s(ang_theta_z, latitud_local, ang_delta, ang_omega)
-hora_estandar = m.standard_time(n, hora_solar, longitud_local)
+n = tm.n_dia(dia, mes)
+gon = tm.g_on(n)
+hora_solar = tm.solar_time(n, hora, minuto, longitud_local)
+ang_delta = tm.delta(n)
+ang_omega = tm.omega(hora_solar)
+ang_omega_s = tm.omega_s(latitud_local, ang_delta)
+hora_aparec_sol = tm.sunrise(ang_omega_s)
+hora_puesta_sol = tm.sunset(ang_omega_s)
+ang_theta = tm.theta(ang_delta, latitud_local, inclinacion, azimuth, ang_omega)
+ang_theta_z = tm.theta_z(ang_delta, latitud_local, azimuth, ang_omega)
+ang_alpha_s = tm.alpha_s(ang_theta_z)
+ang_gamma_s = tm.gamma_s(ang_theta_z, latitud_local, ang_delta, ang_omega)
+hora_estandar = tm.standard_time(n, hora_solar, longitud_local)
 
 
 # Cálculos angulares horarios
@@ -70,10 +70,10 @@ for i in range(nn):
 # ============================================================================
 
 # Radiacion extraterrestre horizontal (instantanea) en  n dia y h hora y m minutos [W/m2]
-Go = m.g_o(gon, ang_theta_z)
+Go = tm.g_o(gon, ang_theta_z)
 
 # Irradiacion diaria en el n dia [J/m2 dia]
-Ho = m.h_o(gon, latitud_local, ang_delta, ang_omega_s)
+Ho = tm.h_o(gon, latitud_local, ang_delta, ang_omega_s)
 
 # -------------------------------------------------------------------------------
 
@@ -84,7 +84,7 @@ Go_m = np.zeros(nn)
 
 for i in range(nn):
   # Radiacion extraterrestre horizontal (instantanea) en  n dia y h hora y m minutos [W/m2]
-  Go_m[i] = m.g_o(gon, AngTheta[i])
+  Go_m[i] = tm.g_o(gon, AngTheta[i])
 
 # figure(3)
 # plot(HoraStd, Go_m, 'r');
@@ -106,8 +106,8 @@ Io_m = np.zeros(n_div)
 for j in range(n_div):
   # La hora donde se inicia el conteo de la irradiacion horaria
   Hora_m[j] = hora_aparec_sol + (hora_puesta_sol - hora_aparec_sol) / n_div * j
-  Io_m[j] = m.l_o(gon, latitud_local, ang_delta, ang_omega_var[j],
-                  ang_omega_var[j + 1])  # Irradiacion horaria [J/m2 h]
+  Io_m[j] = tm.l_o(gon, latitud_local, ang_delta, ang_omega_var[j],
+                   ang_omega_var[j + 1])  # Irradiacion horaria [J/m2 h]
 
 
 # figure(4)
@@ -121,16 +121,16 @@ for j in range(n_div):
 # ==============================================================================
 
 # trasmisividad del cielo de radiacion de haz
-tau_b = m.taub(ang_theta_z, altitud_local)
+tau_b = tm.taub(ang_theta_z, altitud_local)
 
-Gbn = m.g_bn(gon, tau_b)  # Radiación de haz en dirección del sol [W/m2]
+Gbn = tm.g_bn(gon, tau_b)  # Radiación de haz en dirección del sol [W/m2]
 
 # ESTIMACION DE LA RADIACION DIFUSA HORIZONTAL EN CIELO DESPEJADO (Duffie, 2023)
 # ===============================================================
 
-tau_d = m.taud(tau_b)  # trasmisividad del cielo de radiacion difusa
+tau_d = tm.taud(tau_b)  # trasmisividad del cielo de radiacion difusa
 
-Gd = m.g_d(Go, tau_d)  # Radiación difusa sobre superficie horizontal [W/m2]
+Gd = tm.g_d(Go, tau_d)  # Radiación difusa sobre superficie horizontal [W/m2]
 
 # ESTIMACION DE LA RADIACION HORARIA DE HAZ Y DIFUSA EN CIELO DESPEJADO EN DIRECCION DEL SOL G_BEAM_n(Duffie, 2023)
 # ==============================================================================
@@ -143,16 +143,16 @@ G_DIFUS = np.zeros(nn)
 
 for i in range(nn):
   # trasmisividad horaria del cielo de radiacion de haz
-  TAU_BEAM[i] = m.taub(AngThetaZ[i], altitud_local)
+  TAU_BEAM[i] = tm.taub(AngThetaZ[i], altitud_local)
   # Radiación horaria de haz en dirección del sol [W/m2]
-  G_BEAMn[i] = m.g_bn(gon, TAU_BEAM[i])
+  G_BEAMn[i] = tm.g_bn(gon, TAU_BEAM[i])
 
   # trasmisividad horaria del cielo de radiacion difusa
-  TAU_DIF[i] = m.taud(TAU_BEAM[i])
+  TAU_DIF[i] = tm.taud(TAU_BEAM[i])
   # Radiacion horaria extraterrestre horizontal (instantanea) en n dia y h hora y m minutos [W/m2]
-  G_OO[i] = m.g_o(gon, AngThetaZ[i])
+  G_OO[i] = tm.g_o(gon, AngThetaZ[i])
   # Radiación horaria difusa sobre superficie horizontal [W/m2]
-  G_DIFUS[i] = m.g_d(G_OO[i], TAU_DIF[i])
+  G_DIFUS[i] = tm.g_d(G_OO[i], TAU_DIF[i])
 
 #######################################################################
 #######################################################################
@@ -183,9 +183,9 @@ e_cub = 0.0004   # Espesor de la cubierta (acero inoxidable) [m]
 # SISTEMA DE COORDENADA DE LA POSICIÓN DEL SOL (NATURALES Y MODIFICADAS) (Tang, 2009)
 # ======================================================================
 
-n_x, n_y, n_z = m.sun_position(ang_delta, latitud_local,
-                               ang_omega)  # Coordenadas originales
-nn_x, nn_y, nn_z = m.sun_position_prima(
+n_x, n_y, n_z = tm.sun_position(ang_delta, latitud_local,
+                                ang_omega)  # Coordenadas originales
+nn_x, nn_y, nn_z = tm.sun_position_prima(
     n_x, n_y, n_z, inclinacion, azimuth)  # Coordenadas modificadas
 
 # Angulo Theta_t, ángulo que se forma del rayo solar y la proyecion del rayo solar en el tubo [deg]
@@ -196,13 +196,13 @@ ang_theta_t = np.degrees(np.arccos(np.sqrt(nn_x**2 + nn_y**2)))
 # CÁLCULO DE POTENCIA RADIANTE DE HAZ QUE INCIDE EN UN TUBO AL VACIO [W] (Tang, 2009)
 # ===================================================================
 
-ang_OMEGA = m.omega_o(nn_x, nn_y)  # Calcula el ángulo OMEGA
+ang_OMEGA = tm.omega_o(nn_x, nn_y)  # Calcula el ángulo OMEGA
 
 # Determina la función aceptancia
-F_ac = m.f_acceptance(D_int, D_ext, S_sep, ang_OMEGA)
+F_ac = tm.f_acceptance(D_int, D_ext, S_sep, ang_OMEGA)
 
 # Potencia radiante de haz en 1 tubo al vacio [W]
-Pot_Haz_1T = m.direct_radiant_power(Gbn, D_int, L_tubo, ang_theta_t, F_ac)
+Pot_Haz_1T = tm.direct_radiant_power(Gbn, D_int, L_tubo, ang_theta_t, F_ac)
 
 # -------------------------------------------------------------------------------
 
@@ -210,12 +210,13 @@ Pot_Haz_1T = m.direct_radiant_power(Gbn, D_int, L_tubo, ang_theta_t, F_ac)
 # ===================================================================
 
 # Radiación difusa sobre superficie inclinada [W/m2]
-Gdbeta = m.g_dbeta(Gd, inclinacion)
+Gdbeta = tm.g_dbeta(Gd, inclinacion)
 
-F_forma = m.f_ts(D_int, D_ext, S_sep)  # Función de forma para radiación difusa
+# Función de forma para radiación difusa
+F_forma = tm.f_ts(D_int, D_ext, S_sep)
 
 # Potencia radiante difuso en 01 tubo al vacio [W]
-Pot_Dif_1T = m.diffuse_radiant_power(Gdbeta, D_int, L_tubo, F_forma)
+Pot_Dif_1T = tm.diffuse_radiant_power(Gdbeta, D_int, L_tubo, F_forma)
 
 # -------------------------------------------------------------------------------
 
@@ -247,25 +248,26 @@ POTENCIA_DIFUS_1T = np.zeros(nn)
 
 for i in range(nn):  # nn es el número de divisiones del array durante los horarios de sunshine y sunset
   # Array de coordenadas originales durante el dia.
-  Nx[i], Ny[i], Nz[i] = m.sun_pos(ang_delta, latitud_local, AngOmega[i])
+  Nx[i], Ny[i], Nz[i] = tm.sun_pos(ang_delta, latitud_local, AngOmega[i])
   # Array de Coordenadas modificadas durante el dia
-  NNx[i], NNy[i], NNz[i] = m.sun_pos_prima(
+  NNx[i], NNy[i], NNz[i] = tm.sun_pos_prima(
       Nx[i], Ny[i], Nz[i], inclinacion, azimuth)
   # Calcula el ángulo OMEGA durante el dia
-  ANGULO_OMEGA[i] = m.omega_o(NNx[i], NNy[i])
+  ANGULO_OMEGA[i] = tm.omega_o(NNx[i], NNy[i])
   # Angulo Theta_t, ángulo que se forma del rayo solar y la proyecion del rayo solar en el tubo [deg]
   AngThetaT[i] = np.degrees(np.arccos(np.sqrt(NNx[i]**2 + NNy[i]**2)))
 
   # Determina la función aceptancia
-  FUNC_ACCEP[i] = m.f_acceptance(D_int, D_ext, S_sep, ANGULO_OMEGA[i])
+  FUNC_ACCEP[i] = tm.f_acceptance(D_int, D_ext, S_sep, ANGULO_OMEGA[i])
   # Potencia radiante horaria de haz en 1 tubo al vacio [W]
-  POTENCIA_HAZ_1T[i] = m.pot_rad_b_t(
+  POTENCIA_HAZ_1T[i] = tm.pot_rad_b_t(
       G_BEAMn[i], D_int, L_tubo, AngThetaT[i], FUNC_ACCEP[i])
 
   # Radiación difusa sobre superficie inclinada [W/m2]
-  G_DIFUS_BETA[i] = m.g_dbeta(G_DIFUS[i], inclinacion)
+  G_DIFUS_BETA[i] = tm.g_dbeta(G_DIFUS[i], inclinacion)
   # Potencia radiante horaria difusa en 01 tubo al vacio [W]
-  POTENCIA_DIFUS_1T[i] = m.pot_rad_d_t(G_DIFUS_BETA[i], D_int, L_tubo, F_forma)
+  POTENCIA_DIFUS_1T[i] = tm.pot_rad_d_t(
+      G_DIFUS_BETA[i], D_int, L_tubo, F_forma)
 
 # Potencia Total horaria que incide sobre 1 tubo al vacio
 # Matria de potencia horaria total en 01 tubo al vacio [W]
@@ -351,10 +353,10 @@ print("---------------------- \n")
 # CALCULO DE LAS PROPIEDADES DEL AGUA (Cengel, 2015)
 # ==================================================
 
-Rho_T = m.rho_t(T_amb)      # Densidad de agua en [kg/m3]
-K_T = m.kt(T_amb)          # Conductividad Térmica de agua [W/m K]
-Cp_T = m.cp_t(T_amb)        # Calor Específico del Agua [J / kg K]
-Mu_T = m.mu_t(T_amb)        # Viscosidad del agua [Pa s]
+Rho_T = tm.rho_t(T_amb)      # Densidad de agua en [kg/m3]
+K_T = tm.kt(T_amb)          # Conductividad Térmica de agua [W/m K]
+Cp_T = tm.cp_t(T_amb)        # Calor Específico del Agua [J / kg K]
+Mu_T = tm.mu_t(T_amb)        # Viscosidad del agua [Pa s]
 Beta_Coef = 0.000257     # Coeficiente de expansión volumétrica [1/K]
 
 # CALCULO DE GEOMETRIA INTERNA DEL TERMOTANQUE

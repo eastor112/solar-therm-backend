@@ -9,3 +9,4 @@ alembic==1.11.1
 numpy==1.25.0
 python-dotenv
 requests
+pytz
