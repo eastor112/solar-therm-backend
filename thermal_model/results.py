@@ -1,6 +1,6 @@
 import numpy as np
 import thermal_model.theoretical as tm
-import thermal_model.final as tn
+import thermal_model.final as tf
 import thermal_model.utils as tu
 
 
@@ -276,8 +276,8 @@ def get_therma_results(thermal_data, datetime, longitud_local, latitud_local, al
   # Datos ambientales - DATOS CLIMATICOS
   # ------------------------------------
   # Carga los vectores de datos climaticos segun el dia, mes y año escogido
-  datohora, datoradiacion, datotamb, datovviento = tn.dato_clima_diario(
-      anho, mes, dia, thermal_data)
+  datohora, datoradiacion, datotamb, datovviento = tf.split_data_by_datetime(
+      thermal_data, "2020-01-01T06:00:00-05:00")
   # NOTA
   # ----
   # Caso se considere parametros ambientales, solamente se tiene almacenado los datos
@@ -310,19 +310,19 @@ def get_therma_results(thermal_data, datetime, longitud_local, latitud_local, al
   # CALCULO DE LAS PROPIEDADES DEL AGUA (Cengel, 2015)
   # ==================================================
 
-  Rho_T = tn.rho_t(T_amb)      # Densidad de agua en [kg/m3]
-  K_T = tn.kt(T_amb)          # Conductividad Térmica de agua [W/m K]
-  Cp_T = tn.cp_t(T_amb)        # Calor Específico del Agua [J / kg K]
-  Mu_T = tn.mu_t(T_amb)        # Viscosidad del agua [Pa s]
+  Rho_T = tf.rho_t(T_amb)      # Densidad de agua en [kg/m3]
+  K_T = tf.kt(T_amb)          # Conductividad Térmica de agua [W/m K]
+  Cp_T = tf.cp_t(T_amb)        # Calor Específico del Agua [J / kg K]
+  Mu_T = tf.mu_t(T_amb)        # Viscosidad del agua [Pa s]
   Beta_Coef = 0.000257     # Coeficiente de expansión volumétrica [1/K]
 
   # CALCULO DE GEOMETRIA INTERNA DEL TERMOTANQUE
   # ============================================
 
   # Longitud interna del termotanque [m]
-  L_int_TK = tn.long_int_tanque(S_sep, N_tubos)
+  L_int_TK = tf.long_int_tanque(S_sep, N_tubos)
   # Diámetro interno del termotanque [m]
-  D_int_TK = tn.diam_int_tanque(Vol_TK, L_int_TK)
+  D_int_TK = tf.diam_int_tanque(Vol_TK, L_int_TK)
   # Diámetro externo del termotanque [m]
   D_ext_TK = D_int_TK + 2 * (e_TK + e_aisl + e_cub)
 
@@ -349,7 +349,6 @@ def get_therma_results(thermal_data, datetime, longitud_local, latitud_local, al
   for i in range(nn):
     # Matriz de temperatura de ambiente [C] - CASO AMBIENTAL
     TEMP_AMB[i] = np.interp(HoraStd[i], datohora, datotamb)
-    TEMP_AMB[i] = np.interp(HoraStd[i],  [20, 25, 30], [])
     # Matriz de velocidad del viento [m/s] - CASO AMBIENTAL
     VEL_VIENTO[i] = np.interp(HoraStd[i], datohora, datovviento)
 
@@ -448,61 +447,61 @@ def get_therma_results(thermal_data, datetime, longitud_local, latitud_local, al
   # Asignación de las condiciones iniciales
   # ---------------------------------------
   # Inicialmente la densidad de la mezcla es calculada a la temperatura ambiente
-  RHO_MEZCLA[0] = tn.rho_t(TEMP_AMB[0])
+  RHO_MEZCLA[0] = tf.rho_t(TEMP_AMB[0])
 
   # Inicialmente la densidad de la mezcla es calculada a la temperatura ambiente - correlación de Mendoza 1800
-  RHO_MEZCLA_2[0] = tn.rho_t(TEMP_AMB[0])
+  RHO_MEZCLA_2[0] = tf.rho_t(TEMP_AMB[0])
 
   # Inicialmente la conductividad térmica de la mezcla es calculada a la temperatura ambiente
-  K_MEZCLA[0] = tn.kt(TEMP_AMB[0])
+  K_MEZCLA[0] = tf.kt(TEMP_AMB[0])
   # Inicialmente la conductividad térmica de la mezcla es calculada a la temperatura ambiente - correlación de Mendoza 1800
-  K_MEZCLA_2[0] = tn.kt(TEMP_AMB[0])
+  K_MEZCLA_2[0] = tf.kt(TEMP_AMB[0])
 
   # Inicialmente el calor específico de la mezcla es calculado a la temperatura ambiente
-  CP_MEZCLA[0] = tn.cp_t(TEMP_AMB[0])
+  CP_MEZCLA[0] = tf.cp_t(TEMP_AMB[0])
   # Inicialmente el calor específico de la mezcla es calculado a la temperatura ambiente - correlación de Mendoza 1800
-  CP_MEZCLA_2[0] = tn.cp_t(TEMP_AMB[0])
+  CP_MEZCLA_2[0] = tf.cp_t(TEMP_AMB[0])
 
   # Inicialmente la viscosidad dinámica de la mezcla es calculada a la temperatura ambiente
-  MU_MEZCLA[0] = tn.mu_t(TEMP_AMB[0])
+  MU_MEZCLA[0] = tf.mu_t(TEMP_AMB[0])
   # Inicialmente la viscosidad dinámica de la mezcla es calculada a la temperatura ambiente - correlación de Mendoza 1800
-  MU_MEZCLA_2[0] = tn.mu_t(TEMP_AMB[0])
+  MU_MEZCLA_2[0] = tf.mu_t(TEMP_AMB[0])
 
   # Inicialmente la densidad del tanque es calculada a la temperatura ambiente
-  RHO_TANQUE[0] = tn.rho_t(TEMP_AMB[0])
+  RHO_TANQUE[0] = tf.rho_t(TEMP_AMB[0])
   # Inicialmente la densidad del tanque es calculada a la temperatura ambiente - correlación de Mendoza 1800
-  RHO_TANQUE_2[0] = tn.rho_t(TEMP_AMB[0])
+  RHO_TANQUE_2[0] = tf.rho_t(TEMP_AMB[0])
 
   # Inicialmente la conductividad térmica del tanque es calculada a la temperatura ambiente
-  CP_TANQUE[0] = tn.cp_t(TEMP_AMB[0])
+  CP_TANQUE[0] = tf.cp_t(TEMP_AMB[0])
   # Inicialmente la conductividad térmica del tanque es calculada a la temperatura ambiente - correlación de Mendoza 1800
-  CP_TANQUE_2[0] = tn.cp_t(TEMP_AMB[0])
+  CP_TANQUE_2[0] = tf.cp_t(TEMP_AMB[0])
 
-  NU_GR[0] = tn.nu_gr(FLUJO_CALOR_1T[0], Beta_Coef, D_int, RHO_MEZCLA[0],
+  NU_GR[0] = tf.nu_gr(FLUJO_CALOR_1T[0], Beta_Coef, D_int, RHO_MEZCLA[0],
                       K_MEZCLA[0], MU_MEZCLA[0])  # Producto de Nusselt y Grasshof
-  NU_GR_2[0] = tn.nu_gr(FLUJO_CALOR_1T[0], Beta_Coef, D_int, RHO_MEZCLA_2[0], K_MEZCLA_2[0],
+  NU_GR_2[0] = tf.nu_gr(FLUJO_CALOR_1T[0], Beta_Coef, D_int, RHO_MEZCLA_2[0], K_MEZCLA_2[0],
                         MU_MEZCLA_2[0])  # Producto de Nusselt y Grasshof - correlación de Mendoza 1800
 
-  PR[0] = tn.prandtl(CP_MEZCLA[0], MU_MEZCLA[0],
+  PR[0] = tf.prandtl(CP_MEZCLA[0], MU_MEZCLA[0],
                      K_MEZCLA[0])  # Número de Prandtl
   # Número de Prandtl - correlación de Mendoza 1800
-  PR_2[0] = tn.prandtl(CP_MEZCLA_2[0], MU_MEZCLA_2[0], K_MEZCLA_2[0])
+  PR_2[0] = tf.prandtl(CP_MEZCLA_2[0], MU_MEZCLA_2[0], K_MEZCLA_2[0])
 
-  RE[0] = tn.budihardjo(NU_GR[0], PR[0], inclinacion, L_tubo,
+  RE[0] = tf.budihardjo(NU_GR[0], PR[0], inclinacion, L_tubo,
                         D_int)  # Correlación de Budihardjo
   # Correlación de Mendoza 1800
-  RE_2[0] = tn.mendoza_1800(NU_GR_2[0], PR_2[0], inclinacion)
+  RE_2[0] = tf.mendoza_1800(NU_GR_2[0], PR_2[0], inclinacion)
 
   # Velocidad media de salida del flujo de agua caliente [m/s] - correlación de Budihardjo
-  VEL_SAL[0] = tn.vel_sal(RE[0], MU_MEZCLA[0], RHO_MEZCLA[0], D_int, F_flujo)
+  VEL_SAL[0] = tf.vel_sal(RE[0], MU_MEZCLA[0], RHO_MEZCLA[0], D_int, F_flujo)
   # Velocidad media de salida del flujo de agua caliente [m/s] - correlación de Mendoza 1800
-  VEL_SAL_2[0] = tn.vel_sal(RE_2[0], MU_MEZCLA_2[0],
+  VEL_SAL_2[0] = tf.vel_sal(RE_2[0], MU_MEZCLA_2[0],
                             RHO_MEZCLA_2[0], D_int, F_flujo)
 
   # Flujo másico del flujo de agua caliente que sale del tubo al vacío [kg/s] - correlación de Budihardjo
-  MDOT_SAL[0] = tn.mdot_sal(RE[0], MU_MEZCLA[0], D_int, F_flujo)
+  MDOT_SAL[0] = tf.mdot_sal(RE[0], MU_MEZCLA[0], D_int, F_flujo)
   # Flujo másico del flujo de agua caliente que sale del tubo al vacío [kg/s] - correlación de Mendoza 1800
-  MDOT_SAL_2[0] = tn.mdot_sal(RE_2[0], MU_MEZCLA_2[0], D_int, F_flujo)
+  MDOT_SAL_2[0] = tf.mdot_sal(RE_2[0], MU_MEZCLA_2[0], D_int, F_flujo)
 
   # Inicialización de vectores adicionales
   # Inicialmente el flujo de calor es igual a cero [W/m2]
@@ -537,109 +536,109 @@ def get_therma_results(thermal_data, datetime, longitud_local, latitud_local, al
 
   for i in range(1, nn):  # nn es el número de divisiones del array durante los horarios de sunshine y sunset
 
-    if POTENCIA_TOTAL_1T[0, i] >= 0:  # La potencia total debe ser positivo [W]
+    if POTENCIA_TOTAL_1T[i] >= 0:  # La potencia total debe ser positivo [W]
 
       # Calculo del vector Flujo de calor sobre el diámetro interno de 01 tubo al vacío [W/m2]
-      FLUJO_CALOR_1T[0, i] = 2 * POTENCIA_TOTAL_1T[0, i] * \
+      FLUJO_CALOR_1T[i] = 2 * POTENCIA_TOTAL_1T[i] * \
           (Tau_glass * Alfa_glass) / (np.pi * D_int * L_tubo)
 
     else:
 
-      FLUJO_CALOR_1T[0, i] = 0
+      FLUJO_CALOR_1T[i] = 0
 
   for i in range(1, nn):  # nn es el número de divisiones del array durante los horarios de sunshine y sunset
 
       # Calculo de las propiedades del agua a la temperatura de mezcla
       # --------------------------------------------------------------
     # Densidad del agua a la temperatura de mezcla [kg/m3] - correlacion de Budihardjo
-    RHO_MEZCLA[0, i] = tn.rho_t(TEMP_MEZCLA[0, i])
+    RHO_MEZCLA[i] = tf.rho_t(TEMP_MEZCLA[i])
     # Densidad del agua a la temperatura de mezcla [kg/m3] - correlacion de Mendoza 1800
-    RHO_MEZCLA_2[0, i] = tn.rho_t(TEMP_MEZCLA_2[0, i])
+    RHO_MEZCLA_2[i] = tf.rho_t(TEMP_MEZCLA_2[i])
 
     # Conductividad térmica del agua a la temperatura de mezcla [W/m K] - correlacion de Budihardjo
-    K_MEZCLA[0, i] = tn.kt(TEMP_MEZCLA[0, i])
+    K_MEZCLA[i] = tf.kt(TEMP_MEZCLA[i])
     # Conductividad térmica del agua a la temperatura de mezcla [W/m K] - correlacion de Mendoza 1800
-    K_MEZCLA_2[0, i] = tn.kt(TEMP_MEZCLA_2[0, i])
+    K_MEZCLA_2[i] = tf.kt(TEMP_MEZCLA_2[i])
 
     # Calor específico del agua a la temperatura de mezcla [J/kg K] - correlacion de Budihardjo
-    CP_MEZCLA[0, i] = tn.cp_t(TEMP_MEZCLA[0, i])
+    CP_MEZCLA[i] = tf.cp_t(TEMP_MEZCLA[i])
     # Calor específico del agua a la temperatura de mezcla [J/kg K] - correlacion de Mendoza 1800
-    CP_MEZCLA_2[0, i] = tn.cp_t(TEMP_MEZCLA_2[0, i])
+    CP_MEZCLA_2[i] = tf.cp_t(TEMP_MEZCLA_2[i])
 
     # Viscosidad del agua a la temperatura de mezcla [Pa s] - correlacion de Budihardjo
-    MU_MEZCLA[0, i] = tn.mu_t(TEMP_MEZCLA[0, i])
+    MU_MEZCLA[i] = tf.mu_t(TEMP_MEZCLA[i])
     # Viscosidad del agua a la temperatura de mezcla [Pa s] - correlacion de Mendoza 1800
-    MU_MEZCLA_2[0, i] = tn.mu_t(TEMP_MEZCLA_2[0, i])
+    MU_MEZCLA_2[i] = tf.mu_t(TEMP_MEZCLA_2[i])
 
     # Calculo del producto NuGr
     # -------------------------
-    NU_GR[0, i] = tn.nu_gr(FLUJO_CALOR_1T[0, i], Beta_Coef, D_int, RHO_MEZCLA[0, i], K_MEZCLA[0, i],
-                           MU_MEZCLA[0, i])  # Producto de Nusselt y Grasshof - correlacion de Budihardjo
-    NU_GR_2[0, i] = tn.nu_gr(FLUJO_CALOR_1T[0, i], Beta_Coef, D_int, RHO_MEZCLA_2[0, i], K_MEZCLA_2[0, i],
-                             MU_MEZCLA_2[0, i])  # Producto de Nusselt y Grasshof - correlacion de Mendoza 1800
+    NU_GR[i] = tf.nu_gr(FLUJO_CALOR_1T[i], Beta_Coef, D_int, RHO_MEZCLA[i], K_MEZCLA[i],
+                        MU_MEZCLA[i])  # Producto de Nusselt y Grasshof - correlacion de Budihardjo
+    NU_GR_2[i] = tf.nu_gr(FLUJO_CALOR_1T[i], Beta_Coef, D_int, RHO_MEZCLA_2[i], K_MEZCLA_2[i],
+                          MU_MEZCLA_2[i])  # Producto de Nusselt y Grasshof - correlacion de Mendoza 1800
 
     # Calculo del número de Prandtl
     # -----------------------------
     # Número de Prandtl- correlacion de Budihardjo
-    PR[0, i] = tn.prandtl(CP_MEZCLA[0, i], MU_MEZCLA[0, i], K_MEZCLA[0, i])
+    PR[i] = tf.prandtl(CP_MEZCLA[i], MU_MEZCLA[i], K_MEZCLA[i])
     # Número de Prandtl - correlacion de Mendoza 1800
-    PR_2[0, i] = tn.prandtl(
-        CP_MEZCLA_2[0, i], MU_MEZCLA_2[0, i], K_MEZCLA_2[0, i])
+    PR_2[i] = tf.prandtl(
+        CP_MEZCLA_2[i], MU_MEZCLA_2[i], K_MEZCLA_2[i])
 
     # Calculo del Número de Reynolds - CORRELACION DE BUDIHARDJO Y MENDOZA 1800
     # -------------------------------------------------------------------------
-    RE[0, i] = tn.budihardjo(NU_GR[0, i], PR[0, i], inclinacion,
-                             L_tubo, D_int)  # Correlacion de Budihardjo
+    RE[i] = tf.budihardjo(NU_GR[i], PR[i], inclinacion,
+                          L_tubo, D_int)  # Correlacion de Budihardjo
     # Correlacion de Mendoza1800
-    RE_2[0, i] = tn.mendoza1800(NU_GR_2[0, i], PR_2[0, i], inclinacion)
+    RE_2[i] = tf.mendoza_1800(NU_GR_2[i], PR_2[i], inclinacion)
 
     # Calculo de la velocidad media de la salida del agua caliente del tubo al vacío
     # ------------------------------------------------------------------------------
     # Con correlacion de Budiharjo
-    VEL_SAL[0, i] = tn.vel_sal(RE[0, i], MU_MEZCLA[0, i],
-                               RHO_MEZCLA[0, i], D_int, F_flujo)
+    VEL_SAL[i] = tf.vel_sal(RE[i], MU_MEZCLA[i],
+                            RHO_MEZCLA[i], D_int, F_flujo)
     # Con correlacion de Mendoza 1800
-    VEL_SAL_2[0, i] = tn.vel_sal(RE_2[0, i], MU_MEZCLA_2[0, i],
-                                 RHO_MEZCLA_2[0, i], D_int, F_flujo)
+    VEL_SAL_2[i] = tf.vel_sal(RE_2[i], MU_MEZCLA_2[i],
+                              RHO_MEZCLA_2[i], D_int, F_flujo)
 
     # Calculo del flujo masico en la salida del agua caliente del tubo al vacío
     # ------------------------------------------------------------------------
-    MDOT_SAL[0, i] = tn.mdot_sal(RE[0, i], MU_MEZCLA[0, i], D_int, F_flujo)
+    MDOT_SAL[i] = tf.mdot_sal(RE[i], MU_MEZCLA[i], D_int, F_flujo)
     # Con correlacion de Mendoza1800
-    MDOT_SAL_2[0, i] = tn.mdot_sal(
-        RE_2[0, i], MU_MEZCLA_2[0, i], D_int, F_flujo)
+    MDOT_SAL_2[i] = tf.mdot_sal(
+        RE_2[i], MU_MEZCLA_2[i], D_int, F_flujo)
 
     # Calculo de la temperatura de mezcla inicial en función de la temperatura del tanque
     # -----------------------------------------------------------------------------------
-    TEMP_MEZCLA[0, i] = tn.temp_mezcla(FLUJO_CALOR_1T[0, i], L_tubo, RHO_MEZCLA[0, i],
-                                       CP_MEZCLA[0, i], VEL_SAL[0, i], D_int, TEMP_TANQUE[0, i-1])
-    TEMP_MEZCLA_2[0, i] = tn.temp_mezcla(FLUJO_CALOR_1T[0, i], L_tubo, RHO_MEZCLA_2[0, i], CP_MEZCLA_2[0, i],
-                                         VEL_SAL_2[0, i], D_int, TEMP_TANQUE_2[0, i-1])  # Con correlacion de Mendoza1800
+    TEMP_MEZCLA[i] = tf.temp_mezcla(FLUJO_CALOR_1T[i], L_tubo, RHO_MEZCLA[i],
+                                    CP_MEZCLA[i], VEL_SAL[i], D_int, TEMP_TANQUE[i-1])
+    TEMP_MEZCLA_2[i] = tf.temp_mezcla(FLUJO_CALOR_1T[i], L_tubo, RHO_MEZCLA_2[i], CP_MEZCLA_2[i],
+                                      VEL_SAL_2[i], D_int, TEMP_TANQUE_2[i-1])  # Con correlacion de Mendoza1800
 
     # Calculo de la temperatura media de agua caliente a la salida del tubo al vacío
     # ------------------------------------------------------------------------------
-    TEMP_SALIDA[0, i] = tn.temp_salida(
-        TEMP_MEZCLA[0, i], TEMP_TANQUE[0, i-1], F_flujo, VEL_SAL[0, i])
+    TEMP_SALIDA[i] = tf.temp_salida(
+        TEMP_MEZCLA[i], TEMP_TANQUE[i-1], F_flujo, VEL_SAL[i])
     # Con correlacion de Mendoza1800
-    TEMP_SALIDA_2[0, i] = tn.temp_salida(
-        TEMP_MEZCLA_2[0, i], TEMP_TANQUE_2[0, i-1], F_flujo, VEL_SAL_2[0, i])
+    TEMP_SALIDA_2[i] = tf.temp_salida(
+        TEMP_MEZCLA_2[i], TEMP_TANQUE_2[i-1], F_flujo, VEL_SAL_2[i])
 
     # CALCULOS TERMICOS EN EL TERMOTANQUE
     # ===================================
 
     # Calculo de la variación de la temperatura dentro del termotanque
     # -----------------------------------------------------------------
-    DT_Dt[0, i] = tn.dt_dt(MDOT_SAL[0, i], RHO_TANQUE[0, i-1], Vol_TK, N_tubos, CP_TANQUE[0, i-1],
-                           TEMP_SALIDA[0, i], TEMP_TANQUE[0, i-1], TEMP_AMB[0, i-1], U_g, L_int_TK, D_int_TK)
-    DT_Dt_2[0, i] = tn.dt_dt(MDOT_SAL_2[0, i], RHO_TANQUE_2[0, i-1], Vol_TK, N_tubos, CP_TANQUE_2[0, i-1], TEMP_SALIDA_2[0, i],
-                             TEMP_TANQUE_2[0, i-1], TEMP_AMB[0, i-1], U_g, L_int_TK, D_int_TK)  # Con correlacion de Mendoza1800
+    DT_Dt[i] = tf.dt_dt(MDOT_SAL[i], RHO_TANQUE[i-1], Vol_TK, N_tubos, CP_TANQUE[i-1],
+                        TEMP_SALIDA[i], TEMP_TANQUE[i-1], TEMP_AMB[i-1], U_g, L_int_TK, D_int_TK)
+    DT_Dt_2[i] = tf.dt_dt(MDOT_SAL_2[i], RHO_TANQUE_2[i-1], Vol_TK, N_tubos, CP_TANQUE_2[i-1], TEMP_SALIDA_2[i],
+                          TEMP_TANQUE_2[i-1], TEMP_AMB[i-1], U_g, L_int_TK, D_int_TK)  # Con correlacion de Mendoza1800
 
     # Calculo de la Temperatura del agua en el Tanque ACTUALIZADO
     # -----------------------------------------------------------
-    TEMP_TANQUE[0, i] = TEMP_TANQUE[0, i-1] + \
-        DT_Dt[0, i] * (HoraStd[0, i] - HoraStd[0, i-1]) * 3600
-    TEMP_TANQUE_2[0, i] = TEMP_TANQUE_2[0, i-1] + DT_Dt_2[0, i] * \
-        (HoraStd[0, i] - HoraStd[0, i-1]) * \
+    TEMP_TANQUE[i] = TEMP_TANQUE[i-1] + \
+        DT_Dt[i] * (HoraStd[i] - HoraStd[i-1]) * 3600
+    TEMP_TANQUE_2[i] = TEMP_TANQUE_2[i-1] + DT_Dt_2[i] * \
+        (HoraStd[i] - HoraStd[i-1]) * \
         3600  # Con correlacion de Mendoza1800
 
     # Asignación de las propiedades del agua en el tanque ACTUALIZADO
@@ -647,14 +646,45 @@ def get_therma_results(thermal_data, datetime, longitud_local, latitud_local, al
     # Densidad del agua a la temperatura del tanque [kg/m3]
 
     # Densidad del agua a la temperatura del tanque [kg/m3]
-    RHO_TANQUE[0, i] = tn.rho_t(TEMP_TANQUE[0, i])
+    RHO_TANQUE[i] = tf.rho_t(TEMP_TANQUE[i])
     # Densidad del agua a la temperatura del tanque [kg/m3] con correlacion de Mendoza 1800
-    RHO_TANQUE_2[0, i] = tn.rho_t(TEMP_TANQUE_2[0, i])
+    RHO_TANQUE_2[i] = tf.rho_t(TEMP_TANQUE_2[i])
 
     # Calor específico del agua a la temperatura del tanque [J/kg K]
-    CP_TANQUE[0, i] = tn.cp_t(TEMP_TANQUE[0, i])
+    CP_TANQUE[i] = tf.cp_t(TEMP_TANQUE[i])
     # Calor específico del agua a la temperatura del tanque [J/kg K] con correlacion de Mendoza 1800
-    CP_TANQUE_2[0, i] = tn.cp_t(TEMP_TANQUE_2[0, i])
+    CP_TANQUE_2[i] = tf.cp_t(TEMP_TANQUE_2[i])
+
+  for i in range(1, nn):  # nn es el número de divisiones del array durante los horarios de sunshine y sunset
+
+    # Calculo de la eficiencia termica segun la primera ley de la termodinamica.
+    # -------------------------------------------------------------------------
+    ETA_I[i] = tf.eficiencia_1(RHO_TANQUE[i], Vol_TK, N_tubos, CP_TANQUE[i], DT_Dt[i], HoraStd[i-1], HoraStd[i],
+                               POTENCIA_TOTAL_1T[i], D_int, L_tubo)  # Eficiencia térmica en estado transitorio de acuerdo a la primera ley de la termodinamica
+    ETA_I_2[i] = tf.eficiencia_1(RHO_TANQUE_2[i], Vol_TK, N_tubos, CP_TANQUE_2[i], DT_Dt_2[i], HoraStd[i-1], HoraStd[i],
+                                 POTENCIA_TOTAL_1T[i], D_int, L_tubo)  # Eficiencia térmica en estado transitorio de acuerdo a la primera ley de la termodinamica
+
+    # Calculo de la energia termica almacenada en cada paso de tiempo Delta_t [MJ]
+    # ----------------------------------------------------------------------------
+    ENERGIA_TK[i] = ENERGIA_TK[i-1] + RHO_TANQUE[i] * Vol_TK * CP_TANQUE[i] * DT_Dt[i] * \
+        (HoraStd[i] - HoraStd[i-1]) * 3600 / \
+        1e6  # Energia térmica acumulada en el tanque [MJ]
+    ENERGIA_TK_2[i] = ENERGIA_TK_2[i-1] + RHO_TANQUE_2[i] * Vol_TK * CP_TANQUE_2[i] * DT_Dt_2[
+        i] * (HoraStd[i] - HoraStd[i-1]) * 3600 / 1e6  # Energia térmica acumulada en el tanque [MJ]
+
+  # Calculo de la energia almacenada en el dia por la terma solar en [kW-h]
+  # ----------------------------------------------------------------------
+  # energia almacenada en el dia por la terma solar en [kW-h]
+  Energia_Almacenada = ENERGIA_TK[nn-1] / 3.6
+  # energia almacenada en el dia por la terma solar en [kW-h] - Correlacion de Mendoza 1800
+  Energia_Almacenada_2 = ENERGIA_TK_2[nn-1] / 3.6
+
+  # Calculo de la eficiencia global de la terma solar en 1 dia (segun la 1ra ley)
+  # ----------------------------------------------------------------------------
+  # Eficiencia global de la terma solar en 1 dia
+  eficienciaI_dia = Energia_Almacenada / Energia_total_NT
+  # Eficiencia global de la terma solar en 1 dia  - Correlacion de Mendoza 1800
+  eficienciaI_dia_2 = Energia_Almacenada_2 / Energia_total_NT
 
   return {
       "hora_std": HoraStd,
@@ -669,4 +699,10 @@ def get_therma_results(thermal_data, datetime, longitud_local, latitud_local, al
       "potencia_total": POTENCIA_TOTAL_1T,
       "energia_tubo": Energia_Total_1T,
       "energia_n_tubo": Energia_total_NT,
+      "energia_acumulado_dia": Energia_Almacenada,
+      "eficiencia_dia": eficienciaI_dia,
+      "energia_acumulado_dia_mendoza": Energia_Almacenada_2,
+      "eficiencia_dia_mendoza": eficienciaI_dia_2,
+      "eficiencia_1": ETA_I_2,
+      "energia_acumulada": ENERGIA_TK_2,
   }

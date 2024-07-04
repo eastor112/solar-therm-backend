@@ -56,7 +56,7 @@ def fetch_pvgis_data(
       dt_utc = pytz.utc.localize(dt_naive)
       dt_lima = dt_utc.astimezone(lima_tz)
       entry['time'] = dt_lima.strftime('%Y-%m-%dT%H:%M:%S%z')
-    return response.json()
+    return data
   else:
     raise HTTPException(status_code=response.status_code,
                         detail=response.reason)
@@ -86,7 +86,7 @@ class WeatherService(BaseService):
     return fetch_pvgis_data(**params)
 
   def test(self):
-    date_time = "2020-01-01 12:00"
+    date_time = "2020-01-01T06:00:00-05:00"
 
     thermal_data = fetch_pvgis_data(
         -8.031,
@@ -98,8 +98,9 @@ class WeatherService(BaseService):
         120,
         "json"
     )
+
     results = get_therma_results(
-        thermal_data, date_time, -79.0286, -8.11167, 33, 15, 180)
+        thermal_data['outputs']['hourly'], date_time, -79.0286, -8.11167, 33, 15, 180)
     data_converted = {key: value.tolist() if isinstance(
         value, np.ndarray) else value for key, value in results.items()}
 

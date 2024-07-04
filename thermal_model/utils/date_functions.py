@@ -2,7 +2,7 @@ from datetime import datetime
 
 
 def split_date(date_time):
-  date_obj = datetime.strptime(date_time, '%Y-%m-%d %H:%M')
+  date_obj = datetime.strptime(date_time, '%Y-%m-%dT%H:%M:%S%z')
 
   year = date_obj.year
   month = date_obj.month

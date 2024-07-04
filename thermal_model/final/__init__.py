@@ -1,6 +1,6 @@
 from thermal_model.final.budihardjo import budihardjo
 from thermal_model.final.cp_t import cp_t
-from thermal_model.final.dato_climatico_diario import dato_clima_diario
+from thermal_model.final.dato_climatico_diario import split_data_by_datetime
 from thermal_model.final.diam_int_tanque import diam_int_tanque
 from thermal_model.final.dt_dt import dt_dt
 from thermal_model.final.eficiencia_1 import eficiencia_1
