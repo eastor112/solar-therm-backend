@@ -2,6 +2,7 @@ import numpy as np
 import thermal_model.theoretical as tm
 import thermal_model.final as tf
 import thermal_model.utils as tu
+from pprint import pprint
 
 
 def get_therma_results(thermal_data, datetime, longitud_local, latitud_local, altitud_local,
@@ -224,8 +225,7 @@ def get_therma_results(thermal_data, datetime, longitud_local, latitud_local, al
     # Calcula el ángulo OMEGA durante el dia
     ANGULO_OMEGA[i] = tm.omega_angle(NNx[i], NNy[i])
     # Angulo Theta_t, ángulo que se forma del rayo solar y la proyecion del rayo solar en el tubo [deg]
-    AngThetaT[i] = np.degrees(np.arccos(np.sqrt(NNx[i]**2 + NNy[i]**2)))
-
+    AngThetaT[i] = tm.acosd(np.sqrt(NNx[i]**2 + NNy[i]**2)).real
     # Determina la función aceptancia
     FUNC_ACCEP[i] = tm.acceptance_function(
         D_int, D_ext, S_sep, ANGULO_OMEGA[i])

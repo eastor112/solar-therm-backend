@@ -86,16 +86,16 @@ class WeatherService(BaseService):
     return fetch_pvgis_data(**params)
 
   def test(self):
-    date_time = "2020-01-01T06:00:00-05:00"
+    date_time = "2020-01-01T12:00:00-05:00"
 
     thermal_data = fetch_pvgis_data(
-        -8.031,
-        -78.908,
+        -8.11167,
+        -79.0286,
         "PVGIS-ERA5",
         2020,
         2020,
         15,
-        120,
+        180,
         "json"
     )
 

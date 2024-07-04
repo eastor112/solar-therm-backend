@@ -1,32 +1,27 @@
 import numpy as np
+from thermal_model.theoretical import utils
 
-def acceptance_function(D_int, D_ext, S_sep, ang_omega):
-    """
-    Calculate the acceptance function between tube spacing.
 
-    Parameters:
-    - D_int (float): Internal diameter [m].
-    - D_ext (float): External diameter [m].
-    - S_sep (float): Distance between tube centers [m].
-    - ang_OMEGA (float): Angle OMEGA [deg].
+def acceptance_function(D_int, D_ext, S_sep, ang_OMEGA):
+  # Calcular los ángulos críticos OMEGA_0 y OMEGA_1
+  # Angulo crítico mayor [deg]
+  OMEGA_0 = utils.acosd((D_ext + D_int) / (2 * S_sep))
+  # Angulo crítico menor [deg]
+  OMEGA_1 = utils.acosd(((D_ext - D_int) / (2 * S_sep)))
 
-    Returns:
-    - acceptance_function (float): Acceptance function between tube spacing.
-    """
-    # Calculate critical angles OMEGA_0 and OMEGA_1
-    OMEGA_0 = np.degrees(np.arccos((D_int + D_ext) / (2 * S_sep)))  # Greater critical angle [deg]
-    OMEGA_1 = np.degrees(np.arccos((D_int - D_ext) / (2 * S_sep)))  # Smaller critical angle [deg]
+  # Encontrar la función de aceptancia
+  if ang_OMEGA <= OMEGA_0:
+    f_aceptancia = 1  # Pasa toda la radiación solar
+  elif OMEGA_0 < ang_OMEGA <= OMEGA_1:
+    f_aceptancia = (S_sep / D_int) * np.cos(np.radians(ang_OMEGA)) + 0.5 * \
+        (1 - (D_ext / D_int))  # Pasa una fracción de la radiación solar
+  elif ang_OMEGA > OMEGA_1:
+    f_aceptancia = 0  # No pasa ninguna radiación solar
+  else:
+    f_aceptancia = 1  # Caso no contemplado
 
-    # Find the acceptance function
-    if ang_omega <= OMEGA_0:
-        acceptance_function = 1
-    elif OMEGA_0 < ang_omega <= OMEGA_1:
-        acceptance_function = (S_sep / D_int) * np.cos(np.radians(ang_omega)) + 0.5 * (1 - (D_ext / D_int))
-    else:
-        acceptance_function = 0
-
-    return acceptance_function
+  return f_aceptancia
 
 
 if __name__ == '__main__':
-    print(acceptance_function(0.5, 0.5, 0.5, 10))
+  print(acceptance_function(0.5, 0.5, 0.5, 10))
