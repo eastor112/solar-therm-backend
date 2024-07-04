@@ -2,7 +2,6 @@ import numpy as np
 import thermal_model.theoretical as tm
 import thermal_model.final as tf
 import thermal_model.utils as tu
-from pprint import pprint
 
 
 def get_therma_results(thermal_data, datetime, longitud_local, latitud_local, altitud_local,
@@ -197,7 +196,6 @@ def get_therma_results(thermal_data, datetime, longitud_local, latitud_local, al
   Pot_Tot_1T = Pot_Haz_1T + Pot_Dif_1T
 
   # Imprimir resultados o realizar otras operaciones necesarias
-  print("\n")
 
   # CALCULO DE LAS POTENCIAS HORARIAS QUE INCIDEN SOBRE UN TUBO AL VACIO [W] (Tang, 2009)
   # =========================================================================
@@ -303,9 +301,6 @@ def get_therma_results(thermal_data, datetime, longitud_local, latitud_local, al
   # Datos adicionales
   # -----------------
   F_flujo = 0.45  # Es el factor de flujo - Razon de area transversal - area total donde sale agua caliente
-
-  print("Resultados de TERMASOLAR \n")
-  print("---------------------- \n")
 
   # CALCULO DE LAS PROPIEDADES DEL AGUA (Cengel, 2015)
   # ==================================================
