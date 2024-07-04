@@ -99,8 +99,39 @@ class WeatherService(BaseService):
         "json"
     )
 
-    results = get_therma_results(
-        thermal_data['outputs']['hourly'], date_time, -79.0286, -8.11167, 33, 15, 180)
+    params = {
+        'thermal_data':  thermal_data['outputs']['hourly'],
+        'date_time': date_time,
+        'latitud_local': -8.11167,
+        'longitud_local': -79.0286,
+        'altitud_local': 33,
+        'inclinacion': 15,
+        'azimuth': 180,
+        't_amb': 20,
+        'v_viento': 3,
+        'd_int': 0.048,
+        'd_ext': 0.058,
+        'lon_tubo': 1.8,
+        's_sep': 0.056,
+        'vol_tank': 0.3,
+        'num_tubos': 30,
+        'e_tank': 0.0004,
+        'e_aisl': 0.005,
+        'e_cub': 0.0004,
+        'tau_glass': 0.93,
+        'alfa_glass': 0.89,
+        'h_int': 10,
+        'h_ext': 15,
+        'k_tank': 14.9,
+        'k_aisl': 0.06,
+        'k_cub': 14.9,
+        'f_flujo': 0.45,
+        'beta_coef': 0.000257,
+        'nn': 361,
+        'n_div': 12,
+    }
+
+    results = get_therma_results(params)
     data_converted = {key: value.tolist() if isinstance(
         value, np.ndarray) else value for key, value in results.items()}
 
