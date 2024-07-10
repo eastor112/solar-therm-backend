@@ -39,16 +39,16 @@ class PVGISParams(BaseModel):
 
 class CalculateParams(BaseModel):
   date_time: str
-  latitud_local: float
-  longitud_local: float
-  altitud_local: float
+  latitud: float
+  longitud: float
+  altitud: float
   inclinacion: float
   azimuth: int
   t_amb: float
   v_viento: float
   d_int: float
   d_ext: float
-  lon_tubo: float
+  longitud_tubo: float
   s_sep: float
   vol_tank: float
   num_tubos: int

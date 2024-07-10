@@ -7,16 +7,16 @@ import thermal_model.utils as tu
 def get_therma_results(params):
   thermal_data = params.get('thermal_data')
   date_time = params.get('date_time')
-  longitud_local = params.get('longitud_local')
-  latitud_local = params.get('latitud_local')
-  altitud_local = params.get('altitud_local')
+  longitud_local = params.get('longitud')
+  latitud_local = params.get('latitud')
+  altitud_local = params.get('altitud')
   inclinacion = params.get('inclinacion')
   azimuth = params.get('azimuth')
   t_amb = params.get('t_amb')
   v_viento = params.get('v_viento')
   d_int = params.get('d_int')
   d_ext = params.get('d_ext')
-  lon_tubo = params.get('lon_tubo')
+  lon_tubo = params.get('longitud_tubo')
   s_sep = params.get('s_sep')
   vol_tank = params.get('vol_tank')
   num_tubos = params.get('num_tubos')
@@ -716,6 +716,7 @@ def get_therma_results(params):
   # Eficiencia global de la terma solar en 1 dia  - Correlacion de Mendoza 1800
   eficienciaI_dia_2 = energia_almacenada_2 / energia_total_nt
 
+  print(pot_tot_1t)
   return {
       "hora_std": hourly_standard_time,
       "hora_m": hour_m,

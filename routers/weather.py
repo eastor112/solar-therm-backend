@@ -52,8 +52,8 @@ async def calculate(params: CalculateParams = Body(...), session: Session = Depe
   year = int(params.date_time[:4])
 
   thermal_data = fetch_pvgis_data(
-      params.latitud_local,
-      params.longitud_local,
+      params.latitud,
+      params.longitud,
       "PVGIS-ERA5",
       year,
       year,
