@@ -734,6 +734,11 @@ def get_therma_results(params):
       "eficiencia_dia": eficiencia_1_dia,
       "energia_acumulado_dia_mendoza": energia_almacenada_2,
       "eficiencia_dia_mendoza": eficienciaI_dia_2,
+      # plot(HoraStd, NU_GR./PR, 'b'),
+      # plot(HoraStd, RE_2, 'r'),
+      # plot(HoraStd, MDOT_SAL_2*1000, 'g')
+      # plot(HoraStd, VEL_SAL_2*1000, 'b')
+      # plot(HoraStd, TEMP_MEZCLA_2, 'g', HoraStd, TEMP_SALIDA_2, 'b', HoraStd, TEMP_TANQUE_2, 'r', HoraStd, TEMP_AMB,'--m')
       "eficiencia_1": ETA_I_2,
       "energia_acumulada": ENERGIA_TK_2,
   }
