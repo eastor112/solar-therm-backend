@@ -716,7 +716,6 @@ def get_therma_results(params):
   # Eficiencia global de la terma solar en 1 dia  - Correlacion de Mendoza 1800
   eficienciaI_dia_2 = energia_almacenada_2 / energia_total_nt
 
-  print(pot_tot_1t)
   return {
       "hora_std": hourly_standard_time,
       "hora_m": hour_m,
@@ -734,11 +733,14 @@ def get_therma_results(params):
       "eficiencia_dia": eficiencia_1_dia,
       "energia_acumulado_dia_mendoza": energia_almacenada_2,
       "eficiencia_dia_mendoza": eficienciaI_dia_2,
-      # plot(HoraStd, NU_GR./PR, 'b'),
-      # plot(HoraStd, RE_2, 'r'),
-      # plot(HoraStd, MDOT_SAL_2*1000, 'g')
-      # plot(HoraStd, VEL_SAL_2*1000, 'b')
-      # plot(HoraStd, TEMP_MEZCLA_2, 'g', HoraStd, TEMP_SALIDA_2, 'b', HoraStd, TEMP_TANQUE_2, 'r', HoraStd, TEMP_AMB,'--m')
+      "evolucion_nu_gr_pr": NU_GR / PR,
+      "evolucion_reynolds": RE_2,
+      "flujo_masico": MDOT_SAL_2 * 1000,
+      "velocidad_salida": VEL_SAL_2 * 1000,
+      "temperatura_mezcla": TEMP_MEZCLA_2,
+      "temperatura_salida": TEMP_SALIDA_2,
+      "temperatura_tanque": TEMP_TANQUE_2,
+      "temperatura_ambiente": TEMP_AMB,
       "eficiencia_1": ETA_I_2,
       "energia_acumulada": ENERGIA_TK_2,
   }
