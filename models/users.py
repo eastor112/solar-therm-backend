@@ -14,3 +14,4 @@ class User(SQLModel):
   is_admin = Column(Boolean, default=False)
   #
   projects = relationship("Project", back_populates="user")
+  new_projects = relationship("NewProject", back_populates="user")
