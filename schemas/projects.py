@@ -1,8 +1,9 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, validator
 from typing import List, Optional
 from datetime import date, datetime
 from schemas.pipelines import PipelineRetrieveSchema
 from schemas.users import UserRetrieveSchema
+import pytz
 
 
 class ProjectInitializeSchema(BaseModel):
@@ -162,11 +163,18 @@ class NewProjectUpdateSchema(BaseModel):
 class NewProjectRetrieveSchema(NewProjectSchema):
   user: UserRetrieveSchema
 
+  @validator('date_time', pre=True, always=True)
+  def set_timezone(cls, value):
+    if value.tzinfo is None:
+      value = pytz.utc.localize(value)
+    return value.astimezone(pytz.timezone('America/Lima'))
+
   class Config:
     orm_mode = True
     from_attributes = True
     json_encoders = {
-        datetime: lambda v: v.isoformat()
+        datetime: lambda v: v.astimezone(
+            pytz.timezone('America/Lima')).isoformat()
     }
 
 

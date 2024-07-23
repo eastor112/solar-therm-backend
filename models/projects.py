@@ -81,7 +81,7 @@ class NewProject(SQLModel):
             "t_amb": 25,
             "v_viento": 2.5,
             "altitud": 33,
-            "date_time": "2018-12-26T12:00:00-05:00",
+            "date_time": "2018-12-27T12:00:00-05:00",
             "inclinacion": 15,
             "azimuth": 180,
             "vol_tank": 0.3,
