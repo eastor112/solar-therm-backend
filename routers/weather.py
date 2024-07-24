@@ -17,7 +17,7 @@ async def getDayWeather(location_id: int, since: str, to: str, session: Session 
   return WeatherService(session).get_day_weather(location_id, since, to)
 
 
-@router.get("/pvgis")
+@router.post("/pvgis")
 async def getDayWeather(params: PVGISParams = Body(...), session: Session = Depends(get_session)):
 
   year = int(params.date_time[:4])
