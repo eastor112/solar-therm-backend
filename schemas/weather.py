@@ -26,17 +26,6 @@ class WeatherSchema(BaseModel):
     orm_mode = True
 
 
-class PVGISParams(BaseModel):
-  latitude: float
-  longitude: float
-  raddatabase: str = "PVGIS-ERA5"
-  startyear: int = 2020
-  endyear: int = 2020
-  angle: int = 15
-  azimuth: int = 0
-  outputformat: str = 'json'
-
-
 class CalculateParams(BaseModel):
   date_time: str
   latitud: float
@@ -66,3 +55,13 @@ class CalculateParams(BaseModel):
   beta_coef: float
   nn: int
   n_div: int
+
+
+class PVGISParams(BaseModel):
+  date_time: str
+  latitud: float
+  longitud: float
+  inclinacion: float
+  azimuth: int
+  raddatabase: str = "PVGIS-ERA5"
+  outputformat: str = 'json'
